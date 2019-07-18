@@ -1,0 +1,161 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.intership2019.Fragment.CurrentFragment">
+
+    <RelativeLayout
+        android:id="@+id/re_la"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/crop">
+
+        <TextView
+            android:id="@+id/textTemp"
+            android:layout_width="187dp"
+            android:layout_height="75dp"
+            android:layout_below="@+id/textView9"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="156dp"
+            android:textColor="#f000"
+            android:textSize="40dp" />
+
+        <TextView
+            android:id="@+id/textHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView10"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="45dp"
+            android:text="TextView"
+            android:textColor="#f000"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="59dp"
+            android:layout_marginTop="266dp"
+            android:text="Weather"
+            android:textColor="#f000"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <Switch
+            android:id="@+id/switch_CF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="-15dp"
+            android:layout_marginEnd="190dp"
+            android:layout_marginBottom="249dp"
+            android:onClick="temperaturechange"
+            android:switchPadding="10dp"
+            android:text="F or C"
+            android:textOff="@string/Switch_no"
+            android:textOn="@string/Switch_yes"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:showText="true"
+            app:switchMinWidth="100dp"
+            android:thumb="@drawable/switch_mythumb"
+            android:track="@drawable/switch_mytrack"
+            app:thumbTint="@drawable/switch_thumb"
+            app:trackTint="@drawable/switch_track"
+            tools:ignore="OnClick,UnknownId" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="67dp"
+            android:layout_marginEnd="146dp"
+            android:layout_toEndOf="@+id/imageView9"
+            android:text="Temperature"
+            android:textColor="#f000"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="116dp"
+            android:layout_marginEnd="22dp"
+            android:text="Humidity"
+            android:textColor="#f000"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textWeatherMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView7"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="91dp"
+            android:layout_marginTop="28dp"
+            android:textColor="#f000"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="142dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="246dp"
+            android:layout_marginTop="253dp"
+            android:src="@drawable/iconfinder_cloud_115749" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="49dp"
+            android:layout_height="78dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="52dp"
+            android:src="@drawable/iconfinder_weather_21_810005" />
+
+        <TextView
+            android:id="@+id/textmain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView7"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="71dp"
+            android:layout_marginTop="12dp"
+            android:text="TextView"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textAndress"
+            android:layout_width="131dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="22dp"
+            android:text="TextView"
+            android:textSize="15dp"
+            android:textStyle="italic|bold" />
+
+
+    </RelativeLayout>
+
+</FrameLayout>

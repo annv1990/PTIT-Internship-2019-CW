@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_current">Current Weather</string>
+    <string name="title_search">Search</string>
+    <string name="title_forecast">Forecast</string>
+    <string name="title_chart">Chart</string>
+    <string name="Switch_yes">C</string>
+    <string name="Switch_no">F</string>
+
+</resources>

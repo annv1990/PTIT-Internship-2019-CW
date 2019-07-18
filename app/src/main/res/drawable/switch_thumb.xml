@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--Màu ở trạng thái bật-->
+    <item android:state_checked="true"  android:color="#212CC0" />
+    <!--Màu ở trạng thái bình thường (tắt) -->
+    <item android:state_checked="false" android:color="#d9c9c9" />
+</selector>
