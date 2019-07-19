@@ -6,7 +6,7 @@
     tools:context="com.example.intership2019.Fragment.CurrentFragment">
 
     <RelativeLayout
-        android:id="@+id/re_la"
+        android:id="@+id/relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/crop">
@@ -65,10 +65,10 @@
             android:textOn="@string/Switch_yes"
             android:textSize="30sp"
             android:textStyle="bold"
-            app:showText="true"
-            app:switchMinWidth="100dp"
             android:thumb="@drawable/switch_mythumb"
             android:track="@drawable/switch_mytrack"
+            app:showText="true"
+            app:switchMinWidth="100dp"
             app:thumbTint="@drawable/switch_thumb"
             app:trackTint="@drawable/switch_track"
             tools:ignore="OnClick,UnknownId" />
@@ -133,7 +133,7 @@
             android:src="@drawable/iconfinder_weather_21_810005" />
 
         <TextView
-            android:id="@+id/textmain"
+            android:id="@+id/textMain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView7"
@@ -152,6 +152,7 @@
             android:layout_marginStart="17dp"
             android:layout_marginTop="22dp"
             android:text="TextView"
+            android:textColor="#f000"
             android:textSize="15dp"
             android:textStyle="italic|bold" />
 

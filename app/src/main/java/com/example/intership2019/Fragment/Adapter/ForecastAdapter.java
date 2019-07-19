@@ -31,6 +31,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
     }
 
     @Override
+
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int position) {
         com.example.intership2019.Fragment.ForecastWeather.List item = listFW.get(position);
 

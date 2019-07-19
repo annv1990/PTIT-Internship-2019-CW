@@ -1,8 +1,9 @@
 package com.example.intership2019.Fragment;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +16,8 @@ import android.widget.TextView;
 
 import com.example.intership2019.ApiClient;
 import com.example.intership2019.ApiInterface;
+import com.example.intership2019.BottomNavigationBehavior;
 import com.example.intership2019.Fragment.Adapter.ForecastAdapter;
-import com.example.intership2019.Fragment.CurrentWeather.ExampleCW;
 import com.example.intership2019.Fragment.ForecastWeather.ExampleFW;
 import com.example.intership2019.R;
 
@@ -41,11 +42,9 @@ public class ForecastFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<com.example.intership2019.Fragment.ForecastWeather.List> weatherList;
     private ForecastAdapter forecastAdapter;
-    private TextView textandress;
-    private ExampleFW exampleFW;
+    private TextView textAddress;
+    private ExampleFW exampleForecastWeather;
 
-
-    private OnFragmentInteractionListener mListener;
 
     public ForecastFragment() {
         // Required empty public constructor
@@ -58,11 +57,9 @@ public class ForecastFragment extends Fragment {
         return fragment;
     }
 
-    /****************************************************************/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -71,36 +68,34 @@ public class ForecastFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        textandress = (TextView) view.findViewById(R.id.textAndressFW);
+        textAddress = (TextView) view.findViewById(R.id.textAndressFW);
         recyclerView = view.findViewById(R.id.rv_Forecast);
 
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new SlideInUpAnimator());
         recyclerView.setHasFixedSize(true);
 
-        final LinearLayoutManager layoutManager = new  LinearLayoutManager(getActivity());
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setNestedScrollingEnabled(false);
-
         loadData();
         return view;
     }
 
     public void loadData() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ExampleFW> call = apiService.getFW();
+        Call<ExampleFW> call = apiService.getForecastWeather();
         call.enqueue(new Callback<ExampleFW>() {
             @Override
             public void onResponse(Call<ExampleFW> call,
                                    Response<ExampleFW> response) {
-                exampleFW = response.body();
+                exampleForecastWeather = response.body();
                 weatherList = response.body().getList();
-                textandress.setText( exampleFW.getCity().getName() + "," + exampleFW.getCity().getCountry());
+                textAddress.setText(exampleForecastWeather.getCity().getName() + "," + exampleForecastWeather.getCity().getCountry());
                 forecastAdapter = new ForecastAdapter(weatherList);
                 recyclerView.setAdapter(forecastAdapter);
                 forecastAdapter.notifyDataSetChanged();
-                Log.e("fragment", "loading API" + exampleFW.toString());
+                Log.e("fragment", "loading API" + exampleForecastWeather.toString());
             }
 
             @Override

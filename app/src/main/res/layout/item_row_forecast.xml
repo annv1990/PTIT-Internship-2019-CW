@@ -29,6 +29,7 @@
                 android:layout_toRightOf="@+id/icon_weather"
                 android:gravity="top"
                 android:paddingTop="6dp"
+                android:textColor="#f000"
                 android:text="aloasdasasdasdas"
                 android:textSize="15sp" />
 
@@ -39,6 +40,7 @@
                 android:layout_below="@+id/textTempFW"
                 android:layout_toRightOf="@+id/icon_weather"
                 android:paddingTop="2dp"
+                android:textColor="#f000"
                 android:text="aloasdasasdasdas"
                 android:textSize="15sp" />
 
@@ -49,6 +51,7 @@
                 android:layout_below="@+id/textHumidityFW"
                 android:layout_toRightOf="@+id/icon_weather"
                 android:paddingTop="2dp"
+                android:textColor="#f000"
                 android:text="aloasdasasdasdas"
                 android:textSize="15sp" />
 
@@ -59,6 +62,7 @@
                 android:layout_below="@+id/textWeatherMainFW"
                 android:layout_toRightOf="@+id/icon_weather"
                 android:paddingTop="2dp"
+                android:textColor="#f000"
                 android:text="aloasdasasdasdas"
                 android:textSize="15sp" />
 

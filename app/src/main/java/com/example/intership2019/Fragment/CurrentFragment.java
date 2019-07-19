@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,28 +13,24 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.intership2019.ApiClient;
 import com.example.intership2019.ApiInterface;
 import com.example.intership2019.Fragment.CurrentWeather.ExampleCW;
-import com.example.intership2019.Fragment.CurrentWeather.Weather;
 import com.example.intership2019.R;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CurrentFragment extends Fragment  {
+public class CurrentFragment extends Fragment {
 
-    private ExampleCW exampleCW;
-    private TextView textmainweather, textTemp, textHumidity, textandress;
+    private ExampleCW exampleCurrentWeather;
+    private TextView textMainWeather, textTemp, textHumidity, textAndress;
     private Switch aSwitch;
-    RelativeLayout re_la;
+    RelativeLayout relative_layout;
 
-    private Context context ;
+    private Context context;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,6 +44,7 @@ public class CurrentFragment extends Fragment  {
         fragment.setArguments(args);
         return fragment;
     }
+
     /************************************************************************/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,8 +54,8 @@ public class CurrentFragment extends Fragment  {
 
         textHumidity = (TextView) view.findViewById(R.id.textHumidity);
         textTemp = (TextView) view.findViewById(R.id.textTemp);
-        textmainweather = (TextView) view.findViewById(R.id.textmain);
-        textandress = (TextView) view.findViewById(R.id.textAndress);
+        textMainWeather = (TextView) view.findViewById(R.id.textMain);
+        textAndress = (TextView) view.findViewById(R.id.textAndress);
 
         aSwitch = (Switch) view.findViewById(R.id.switch_CF);
         loadAnswers();
@@ -70,55 +65,43 @@ public class CurrentFragment extends Fragment  {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        re_la = view.findViewById(R.id.re_la);
-
+        relative_layout = view.findViewById(R.id.relative_layout);
     }
 
     public void loadAnswers() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ExampleCW> call = apiService.getCW();
-//        Log.e("21312", call.request().url().toString());
-        //List<ExampleCW> lll = call.execute().body();
-        // c2
+        Call<ExampleCW> call = apiService.getCurrentWeather();
         call.enqueue(new Callback<ExampleCW>() {
             @Override
             public void onResponse(Call<ExampleCW> call, Response<ExampleCW> response) {
-                exampleCW = response.body();
-                textTemp.setText(exampleCW.getMain().getTemp()+"°F");
-                textHumidity.setText(exampleCW.getMain().getHumidity()+"%");
-                textandress.setText("Andress"+":"+exampleCW.getName()+","+ exampleCW.getSys().getCountry());
-                String des = exampleCW.getWeather().get(0).getDescription();
-                String main = exampleCW.getWeather().get(0).getMain();
-                textmainweather.setText(des);
+                exampleCurrentWeather = response.body();
+                textTemp.setText(exampleCurrentWeather.getMain().getTemp() + "°F");
+                textHumidity.setText(exampleCurrentWeather.getMain().getHumidity() + "%");
+                textAndress.setText("Andress" + ":" + exampleCurrentWeather.getName() + "," + exampleCurrentWeather.getSys().getCountry());
+                String des = exampleCurrentWeather.getWeather().get(0).getDescription();
+                String main = exampleCurrentWeather.getWeather().get(0).getMain();
+                textMainWeather.setText(des);
 
-                if(main.equals("Clear")){
-                    re_la.setBackgroundResource(R.drawable.currentwall1);
+                if (main.equals("Clear")) {
+                    relative_layout.setBackgroundResource(R.drawable.currentwall1);
+                } else if (main.equals("Clouds")) {
+                    relative_layout.setBackgroundResource(R.drawable.may);
+                } else if (main.equals("Rain")) {
+                    relative_layout.setBackgroundResource(R.drawable.rain);
                 }
-                else if(main.equals("Clouds")){
-                    re_la.setBackgroundResource(R.drawable.may);
-                }
-                else if(main.equals("Rain")){
-                    re_la.setBackgroundResource(R.drawable.rain);
-                }
-
 
                 aSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         boolean on = ((Switch) v).isChecked();
-                        if(on){
-                            textTemp.setText(new Integer((int) ((exampleCW.getMain().getTemp()-32)*5/9)) +"°C");
-//                            Toast.makeText(context, "Change into C", Toast.LENGTH_SHORT).show();
-
-                        }else{
-                            textTemp.setText(exampleCW.getMain().getTemp()+"°F");
-//                            Toast.makeText(context, "Change into F", Toast.LENGTH_SHORT).show();
-
+                        if (on) {
+                            textTemp.setText(new Integer((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9)) + "°C");
+                        } else {
+                            textTemp.setText(exampleCurrentWeather.getMain().getTemp() + "°F");
                         }
                     }
                 });
-                Log.e("fragment", "posts loaded from API" );
-
+                Log.e("fragment", "posts loaded from API");
             }
 
             @Override
@@ -133,22 +116,11 @@ public class CurrentFragment extends Fragment  {
         super.onCreate(savedInstanceState);
     }
 
-    /**************************************************************************/
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
         }
     }
 
