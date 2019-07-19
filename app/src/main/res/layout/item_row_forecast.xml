@@ -23,7 +23,7 @@
                 android:padding="5dp" />
 
             <TextView
-                android:id="@+id/textTempFW"
+                android:id="@+id/textTempForecastWeather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/icon_weather"
@@ -34,10 +34,10 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/textHumidityFW"
+                android:id="@+id/textHumidityForecastWeather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textTempFW"
+                android:layout_below="@+id/textTempForecastWeather"
                 android:layout_toRightOf="@+id/icon_weather"
                 android:paddingTop="2dp"
                 android:textColor="#f000"
@@ -45,10 +45,10 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/textWeatherMainFW"
+                android:id="@+id/textWeatherMainForecastWeather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textHumidityFW"
+                android:layout_below="@+id/textHumidityForecastWeather"
                 android:layout_toRightOf="@+id/icon_weather"
                 android:paddingTop="2dp"
                 android:textColor="#f000"
@@ -56,10 +56,10 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/textDateTimeFW"
+                android:id="@+id/textDateTimeForecastWeather"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textWeatherMainFW"
+                android:layout_below="@+id/textWeatherMainForecastWeather"
                 android:layout_toRightOf="@+id/icon_weather"
                 android:paddingTop="2dp"
                 android:textColor="#f000"

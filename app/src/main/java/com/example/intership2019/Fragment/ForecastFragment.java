@@ -2,8 +2,6 @@ package com.example.intership2019.Fragment;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,9 +14,9 @@ import android.widget.TextView;
 
 import com.example.intership2019.ApiClient;
 import com.example.intership2019.ApiInterface;
-import com.example.intership2019.BottomNavigationBehavior;
+import com.example.intership2019.Constant;
 import com.example.intership2019.Fragment.Adapter.ForecastAdapter;
-import com.example.intership2019.Fragment.ForecastWeather.ExampleFW;
+import com.example.intership2019.Fragment.ForecastWeather.ForecastWeatherItem;
 import com.example.intership2019.R;
 
 import java.util.List;
@@ -39,11 +37,11 @@ import retrofit2.Response;
  */
 public class ForecastFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewForecastWeather;
     private List<com.example.intership2019.Fragment.ForecastWeather.List> weatherList;
     private ForecastAdapter forecastAdapter;
     private TextView textAddress;
-    private ExampleFW exampleForecastWeather;
+    private ForecastWeatherItem forecastWeatherItem;
 
 
     public ForecastFragment() {
@@ -68,39 +66,39 @@ public class ForecastFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        textAddress = (TextView) view.findViewById(R.id.textAndressFW);
-        recyclerView = view.findViewById(R.id.rv_Forecast);
+        textAddress = (TextView) view.findViewById(R.id.textAddressForecastWeather);
+        recyclerViewForecastWeather = view.findViewById(R.id.rv_Forecast);
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setItemAnimator(new SlideInUpAnimator());
-        recyclerView.setHasFixedSize(true);
+        recyclerViewForecastWeather.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerViewForecastWeather.setItemAnimator(new SlideInUpAnimator());
+        recyclerViewForecastWeather.setHasFixedSize(true);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewForecastWeather.setLayoutManager(layoutManager);
         loadData();
         return view;
     }
 
     public void loadData() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ExampleFW> call = apiService.getForecastWeather();
-        call.enqueue(new Callback<ExampleFW>() {
+        Call<ForecastWeatherItem> call = apiService.getForecastWeather();
+        call.enqueue(new Callback<ForecastWeatherItem>() {
             @Override
-            public void onResponse(Call<ExampleFW> call,
-                                   Response<ExampleFW> response) {
-                exampleForecastWeather = response.body();
+            public void onResponse(Call<ForecastWeatherItem> call,
+                                   Response<ForecastWeatherItem> response) {
+                forecastWeatherItem = response.body();
                 weatherList = response.body().getList();
-                textAddress.setText(exampleForecastWeather.getCity().getName() + "," + exampleForecastWeather.getCity().getCountry());
+                textAddress.setText(forecastWeatherItem.getCity().getName() + "," + forecastWeatherItem.getCity().getCountry());
                 forecastAdapter = new ForecastAdapter(weatherList);
-                recyclerView.setAdapter(forecastAdapter);
+                recyclerViewForecastWeather.setAdapter(forecastAdapter);
                 forecastAdapter.notifyDataSetChanged();
-                Log.e("fragment", "loading API" + exampleForecastWeather.toString());
+                Log.e(Constant.TAG, "loading API" + forecastWeatherItem.toString());
             }
 
             @Override
-            public void onFailure(Call<ExampleFW> call, Throwable t) {
-                Log.d("MainActivity", "error loading from API");
+            public void onFailure(Call<ForecastWeatherItem> call, Throwable t) {
+                Log.d(Constant.TAG, "error loading from API");
             }
         });
     }

@@ -3,7 +3,7 @@ package com.example.intership2019.Fragment.ForecastWeather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ExampleFW {
+public class ForecastWeatherItem {
     @SerializedName("cod")
     @Expose
     private String cod;

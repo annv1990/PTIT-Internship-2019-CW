@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.example.intership2019.ApiClient;
 import com.example.intership2019.ApiInterface;
-import com.example.intership2019.Fragment.CurrentWeather.ExampleCW;
+import com.example.intership2019.Constant;
+import com.example.intership2019.Fragment.CurrentWeather.CurrentWeatherItem;
+
 import com.example.intership2019.R;
 
 import retrofit2.Call;
@@ -25,10 +27,10 @@ import retrofit2.Response;
 
 public class CurrentFragment extends Fragment {
 
-    private ExampleCW exampleCurrentWeather;
+    private CurrentWeatherItem exampleCurrentWeather;
     private TextView textMainWeather, textTemp, textHumidity, textAndress;
     private Switch aSwitch;
-    RelativeLayout relative_layout;
+    RelativeLayout relativeLayoutCurrentWeather;
 
     private Context context;
 
@@ -65,29 +67,29 @@ public class CurrentFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        relative_layout = view.findViewById(R.id.relative_layout);
+        relativeLayoutCurrentWeather = view.findViewById(R.id.relative_layout);
     }
 
     public void loadAnswers() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<ExampleCW> call = apiService.getCurrentWeather();
-        call.enqueue(new Callback<ExampleCW>() {
+        Call<CurrentWeatherItem> call = apiService.getCurrentWeather();
+        call.enqueue(new Callback<CurrentWeatherItem>() {
             @Override
-            public void onResponse(Call<ExampleCW> call, Response<ExampleCW> response) {
+            public void onResponse(Call<CurrentWeatherItem> call, Response<CurrentWeatherItem> response) {
                 exampleCurrentWeather = response.body();
-                textTemp.setText(exampleCurrentWeather.getMain().getTemp() + "°F");
+                textTemp.setText(exampleCurrentWeather.getMain().getTemp() + Constant.F_TEMP);
                 textHumidity.setText(exampleCurrentWeather.getMain().getHumidity() + "%");
-                textAndress.setText("Andress" + ":" + exampleCurrentWeather.getName() + "," + exampleCurrentWeather.getSys().getCountry());
+                textAndress.setText(exampleCurrentWeather.getName() + "," + exampleCurrentWeather.getSys().getCountry());
                 String des = exampleCurrentWeather.getWeather().get(0).getDescription();
                 String main = exampleCurrentWeather.getWeather().get(0).getMain();
                 textMainWeather.setText(des);
 
-                if (main.equals("Clear")) {
-                    relative_layout.setBackgroundResource(R.drawable.currentwall1);
-                } else if (main.equals("Clouds")) {
-                    relative_layout.setBackgroundResource(R.drawable.may);
-                } else if (main.equals("Rain")) {
-                    relative_layout.setBackgroundResource(R.drawable.rain);
+                if (main.equals(Constant.CLEAR)) {
+                    relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.currentwall1);
+                } else if (main.equals(Constant.CLOUDS)) {
+                    relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.may);
+                } else if (main.equals(Constant.RAIN)) {
+                    relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.rain);
                 }
 
                 aSwitch.setOnClickListener(new View.OnClickListener() {
@@ -95,18 +97,18 @@ public class CurrentFragment extends Fragment {
                     public void onClick(View v) {
                         boolean on = ((Switch) v).isChecked();
                         if (on) {
-                            textTemp.setText(new Integer((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9)) + "°C");
+                            textTemp.setText(new Integer((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9)) + Constant.C_TEMP);
                         } else {
-                            textTemp.setText(exampleCurrentWeather.getMain().getTemp() + "°F");
+                            textTemp.setText(exampleCurrentWeather.getMain().getTemp() + Constant.F_TEMP);
                         }
                     }
                 });
-                Log.e("fragment", "posts loaded from API");
+                Log.e(Constant.TAG, "posts loaded from API");
             }
 
             @Override
-            public void onFailure(Call<ExampleCW> call, Throwable t) {
-                Log.e("fragment current", "error loading from API" + t.getMessage());
+            public void onFailure(Call<CurrentWeatherItem> call, Throwable t) {
+                Log.e(Constant.TAG, "error loading from API" + t.getMessage());
             }
         });
     }

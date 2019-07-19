@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.intership2019.Fragment.ForecastWeather.ExampleFW;
 import com.example.intership2019.R;
 
 import java.util.List;
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.RecyclerViewHolder> {
 
-    private List<com.example.intership2019.Fragment.ForecastWeather.List> listFW;
+    private List<com.example.intership2019.Fragment.ForecastWeather.List> listForecastWeather;
 
     @NonNull
     @Override
@@ -33,19 +32,19 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
     @Override
 
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int position) {
-        com.example.intership2019.Fragment.ForecastWeather.List item = listFW.get(position);
+        com.example.intership2019.Fragment.ForecastWeather.List item = listForecastWeather.get(position);
 
-        TextView textTempFW = recyclerViewHolder.textTempFW;
-        textTempFW.setText("Temperature: " + (new Integer((int) ((item.getMain().getTemp() - 32) * 5 / 9)) + "°C"));
+        TextView textTempForecastWeather = recyclerViewHolder.textTempForecastWeather;
+        textTempForecastWeather.setText("Temperature: " + (new Integer((int) ((item.getMain().getTemp() - 32) * 5 / 9)) + "°C"));
 
-        TextView textHumidityFW = recyclerViewHolder.textHumidityFW;
-        textHumidityFW.setText("Humidity: " + item.getMain().getHumidity() + "%");
+        TextView textHumidityForecastWeather = recyclerViewHolder.textHumidityForecastWeather;
+        textHumidityForecastWeather.setText("Humidity: " + item.getMain().getHumidity() + "%");
 
-        TextView textWeatherMainFW = recyclerViewHolder.textWeatherMainFW;
-        textWeatherMainFW.setText("Weather: " + item.getWeather().get(0).getMain());
+        TextView textWeatherMainForecastWeather = recyclerViewHolder.textWeatherMainForecastWeather;
+        textWeatherMainForecastWeather.setText("Weather: " + item.getWeather().get(0).getMain());
 
-        TextView textDateTimeFW = recyclerViewHolder.textDateTimeFW;
-        textDateTimeFW.setText("Date: " + item.getDtTxt());
+        TextView textDateTimeForecastWeather = recyclerViewHolder.textDateTimeForecastWeather;
+        textDateTimeForecastWeather.setText("Date: " + item.getDtTxt());
 
         ImageView icon_weather = recyclerViewHolder.icon_weather;
         String weather = item.getWeather().get(0).getMain();
@@ -59,29 +58,27 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
 
     @Override
     public int getItemCount() {
-        return listFW.size();
+        return listForecastWeather.size();
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        public TextView textTempFW, textHumidityFW, textWeatherMainFW, textDateTimeFW;
+        public TextView textTempForecastWeather, textHumidityForecastWeather, textWeatherMainForecastWeather, textDateTimeForecastWeather;
         public ImageView icon_weather;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            textTempFW = (TextView) itemView.findViewById(R.id.textTempFW);
-            textHumidityFW = (TextView) itemView.findViewById(R.id.textHumidityFW);
-            textWeatherMainFW = (TextView) itemView.findViewById(R.id.textWeatherMainFW);
-            textDateTimeFW = (TextView) itemView.findViewById(R.id.textDateTimeFW);
-
+            textTempForecastWeather = (TextView) itemView.findViewById(R.id.textTempForecastWeather);
+            textHumidityForecastWeather = (TextView) itemView.findViewById(R.id.textHumidityForecastWeather);
+            textWeatherMainForecastWeather = (TextView) itemView.findViewById(R.id.textWeatherMainForecastWeather);
+            textDateTimeForecastWeather = (TextView) itemView.findViewById(R.id.textDateTimeForecastWeather);
             icon_weather = (ImageView) itemView.findViewById(R.id.icon_weather);
-
 
         }
     }
 
     public ForecastAdapter(List<com.example.intership2019.Fragment.ForecastWeather.List> items) {
-        listFW = items;
+        listForecastWeather = items;
     }
 
 }
