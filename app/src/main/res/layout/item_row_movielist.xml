@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageMovie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="5dp" />
+
+            <TextView
+                android:id="@+id/textTitleMovie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/imageMovie"
+                android:gravity="top"
+                android:text="aloasdasasdasdas"
+                android:textColor="#2241E2"
+                android:textSize="17sp"
+                android:textStyle="bold|normal" />
+
+            <TextView
+                android:id="@+id/textRelease_Duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textTitleMovie"
+                android:layout_toRightOf="@+id/imageMovie"
+                android:text="aloasdasasdasdas"
+                android:textColor="#F54D49"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/textOverView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textRelease_Duration"
+                android:layout_toRightOf="@+id/imageMovie"
+                android:lines="2"
+                android:minLines="2"
+                android:singleLine="false"
+                android:text="aloasdasasdasdas"
+                android:textColor="#f000"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_vote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textOverView"
+                android:layout_toRightOf="@+id/imageMovie"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageRateMovie1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/imageRateMovie2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/imageRateMovie3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/imageRateMovie4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/imageRateMovie5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/movieId"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearLayout_vote"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

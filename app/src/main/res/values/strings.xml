@@ -4,8 +4,12 @@
     <string name="title_current">Current Weather</string>
     <string name="title_search">Search</string>
     <string name="title_forecast">Forecast</string>
-    <string name="title_chart">Chart</string>
+    <string name="title_movie_list">Movie List</string>
     <string name="Switch_yes">C</string>
     <string name="Switch_no">F</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
 
 </resources>

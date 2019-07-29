@@ -15,6 +15,6 @@
         android:icon="@drawable/time"/>
     <item
         android:id="@+id/navigation_chart"
-        android:title="@string/title_chart"
-        android:icon="@drawable/chart"/>
+        android:title="@string/title_movie_list"
+        android:icon="@drawable/movie_projector_50px"/>
 </menu>

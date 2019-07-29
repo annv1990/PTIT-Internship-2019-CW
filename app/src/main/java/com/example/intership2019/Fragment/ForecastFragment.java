@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.intership2019.ApiClient;
-import com.example.intership2019.ApiInterface;
+import com.example.intership2019.ApiClientWeather;
+import com.example.intership2019.ApiInterfaceWeather;
 import com.example.intership2019.Constant;
 import com.example.intership2019.Fragment.Adapter.ForecastAdapter;
 import com.example.intership2019.Fragment.ForecastWeather.ForecastWeatherItem;
@@ -27,14 +27,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ForecastFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ForecastFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ForecastFragment extends Fragment {
 
     private RecyclerView recyclerViewForecastWeather;
@@ -81,7 +73,7 @@ public class ForecastFragment extends Fragment {
     }
 
     public void loadData() {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
         Call<ForecastWeatherItem> call = apiService.getForecastWeather();
         call.enqueue(new Callback<ForecastWeatherItem>() {
             @Override
@@ -103,8 +95,4 @@ public class ForecastFragment extends Fragment {
         });
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

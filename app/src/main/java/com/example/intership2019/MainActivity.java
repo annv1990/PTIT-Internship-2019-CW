@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.example.intership2019.Fragment.ChartFragment;
 import com.example.intership2019.Fragment.CurrentFragment;
 import com.example.intership2019.Fragment.ForecastFragment;
+import com.example.intership2019.Fragment.MovieListFragment;
 import com.example.intership2019.Fragment.SearchFragment;
 
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_chart:
-                    fragment = new ChartFragment();
+                    fragment = new MovieListFragment();
                     loadFragment(fragment);
                     return true;
             }

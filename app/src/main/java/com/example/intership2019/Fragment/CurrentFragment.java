@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.intership2019.ApiClient;
-import com.example.intership2019.ApiInterface;
+import com.example.intership2019.ApiClientWeather;
+import com.example.intership2019.ApiInterfaceWeather;
 import com.example.intership2019.Constant;
 import com.example.intership2019.Fragment.CurrentWeather.CurrentWeatherItem;
 
@@ -32,9 +32,8 @@ public class CurrentFragment extends Fragment {
     private Switch aSwitch;
     RelativeLayout relativeLayoutCurrentWeather;
 
-    private Context context;
 
-    private OnFragmentInteractionListener mListener;
+
 
     public CurrentFragment() {
         // Required empty public constructor
@@ -53,6 +52,7 @@ public class CurrentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_current, container, false);
+        relativeLayoutCurrentWeather = view.findViewById(R.id.relative_layout);
 
         textHumidity = (TextView) view.findViewById(R.id.textHumidity);
         textTemp = (TextView) view.findViewById(R.id.textTemp);
@@ -64,14 +64,8 @@ public class CurrentFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        relativeLayoutCurrentWeather = view.findViewById(R.id.relative_layout);
-    }
-
     public void loadAnswers() {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
         Call<CurrentWeatherItem> call = apiService.getCurrentWeather();
         call.enqueue(new Callback<CurrentWeatherItem>() {
             @Override
@@ -121,17 +115,12 @@ public class CurrentFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

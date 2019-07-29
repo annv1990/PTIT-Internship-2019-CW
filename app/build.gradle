@@ -25,7 +25,7 @@ repositories {
 dependencies {
     //hieu ung recylerview
     implementation 'jp.wasabeef:recyclerview-animators:2.2.3'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
@@ -36,15 +36,11 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     // RecyclerView
     implementation 'com.android.support:recyclerview-v7:28.0.0'
-
     // CardView
     implementation 'com.android.support:cardview-v7:28.0.0'
-
     // volley http library
     implementation 'com.android.volley:volley:1.1.0'
-
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-
     // glide image library
     implementation 'com.github.bumptech.glide:glide:4.3.1'
     implementation 'com.google.code.gson:gson:2.8.0'
@@ -52,4 +48,5 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:gridlayout-v7:28.0.0'
+    implementation 'org.webjars.npm:linkify-it:2.2.0'
 }

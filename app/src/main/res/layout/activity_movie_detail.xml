@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.intership2019.Fragment.MovieList.MovieDetailActivity">
+
+    <RelativeLayout
+        android:id="@+id/frameLayoutMovieDetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/imageBackgroundMovie"
+            android:layout_width="match_parent"
+            android:layout_height="190dp" />
+
+        <TextView
+            android:id="@+id/textMovieName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageBackgroundMovie"
+            android:paddingTop="20dp"
+            android:text="ansdkjahsjdjasldk"
+            android:textColor="#657AD8"
+            android:textSize="25sp"
+            android:textStyle="bold|normal" />
+
+        <TextView
+            android:id="@+id/textRelease_Duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textMovieName"
+            android:layout_toRightOf="@+id/imageMovie"
+            android:text="aloasdasasdasdas"
+            android:textColor="#F54D49"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/LinearLayout_Genres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textRelease_Duration"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#f000"
+                android:text="Genres: "
+                android:textSize="20sp"
+                android:paddingRight="5dp"/>
+
+            <TextView
+                android:id="@+id/textGenres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#f000"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_vote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/LinearLayout_Genres"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/vote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#f000"
+                android:text="Vote: "
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/imageRateMovie1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/imageRateMovie2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/imageRateMovie3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/imageRateMovie4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/imageRateMovie5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textOverView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout_vote"
+            android:paddingTop="15dp"
+            android:text="aloasdasasdasdas"
+            android:textColor="#f000"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+</ScrollView>

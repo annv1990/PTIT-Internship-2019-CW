@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.intership2019.Constant;
 import com.example.intership2019.R;
 
 import java.util.List;
@@ -49,9 +50,9 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
         ImageView icon_weather = recyclerViewHolder.icon_weather;
         String weather = item.getWeather().get(0).getMain();
 
-        if (weather.equals("Clouds")) {
+        if (weather.equals(Constant.CLOUDS)) {
             icon_weather.setImageResource(R.drawable.iconfinder_cloud_115749);
-        } else if (weather.equals("Rain")) {
+        } else if (weather.equals(Constant.RAIN)) {
             icon_weather.setImageResource(R.drawable.iconfinder_weather_05_809980);
         }
     }
