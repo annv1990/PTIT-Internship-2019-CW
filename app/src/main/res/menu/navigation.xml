@@ -5,16 +5,11 @@
         android:title="@string/title_current"
         android:icon="@drawable/current_location"/>
     <item
-        android:id="@+id/navigation_search"
-        android:title="@string/title_search"
-        android:icon="@drawable/search_location"
-        />
-    <item
         android:id="@+id/navigation_forecast"
         android:title="@string/title_forecast"
         android:icon="@drawable/time"/>
     <item
-        android:id="@+id/navigation_chart"
+        android:id="@+id/navigation_movie"
         android:title="@string/title_movie_list"
         android:icon="@drawable/movie_projector_50px"/>
 </menu>

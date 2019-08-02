@@ -1,9 +1,12 @@
 package com.example.intership2019.Fragment;
 
-import android.net.Uri;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.intership2019.ApiClientWeather;
 import com.example.intership2019.ApiInterfaceWeather;
@@ -18,10 +22,12 @@ import com.example.intership2019.Constant;
 import com.example.intership2019.Fragment.Adapter.ForecastAdapter;
 import com.example.intership2019.Fragment.ForecastWeather.ForecastWeatherItem;
 import com.example.intership2019.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +40,9 @@ public class ForecastFragment extends Fragment {
     private ForecastAdapter forecastAdapter;
     private TextView textAddress;
     private ForecastWeatherItem forecastWeatherItem;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor editor;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     public ForecastFragment() {
@@ -59,30 +68,77 @@ public class ForecastFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
         textAddress = (TextView) view.findViewById(R.id.textAddressForecastWeather);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
+
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         recyclerViewForecastWeather = view.findViewById(R.id.rv_Forecast);
-
-        recyclerViewForecastWeather.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerViewForecastWeather.setItemAnimator(new SlideInUpAnimator());
         recyclerViewForecastWeather.setHasFixedSize(true);
-
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewForecastWeather.setLayoutManager(layoutManager);
-        loadData();
+
+        loadDataForecast();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                fetchTimelineAsync(0);
+                loadDataForecast();
+
+            }
+        });
         return view;
     }
+ /*   public void fetchTimelineAsync(int page) {
+        // Send the network request to fetch the updated data
+        // `client` here is an instance of Android Async HTTP
+        // getHomeTimeline is an example endpoint.
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            public void onSuccess(JSONArray json) {
+                // Remember to CLEAR OUT old items before appending in the new ones
+                forecastAdapter.clear();
+                // ...the data has come back, add new items to your adapter...
+                forecastAdapter.addAll();
+                // Now we call setRefreshing(false) to signal refresh has finished
+                swipeRefreshLayout.setRefreshing(false);
+            }
 
-    public void loadData() {
+            public void onFailure(Throwable e) {
+                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
+            }
+        });
+    }*/
+
+    private void initPreferences() {
+        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        editor = mSharedPreferences.edit();
+    }
+
+    public void loadDataForecast() {
+        swipeRefreshLayout.setRefreshing(true);
         ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
         Call<ForecastWeatherItem> call = apiService.getForecastWeather();
         call.enqueue(new Callback<ForecastWeatherItem>() {
             @Override
             public void onResponse(Call<ForecastWeatherItem> call,
                                    Response<ForecastWeatherItem> response) {
+                swipeRefreshLayout.setRefreshing(false);
                 forecastWeatherItem = response.body();
                 weatherList = response.body().getList();
-                textAddress.setText(forecastWeatherItem.getCity().getName() + "," + forecastWeatherItem.getCity().getCountry());
+                String Address = forecastWeatherItem.getCity().getName();
+                textAddress.setText(Address);
                 forecastAdapter = new ForecastAdapter(weatherList);
+
+                initPreferences();
+                Gson gson = new Gson();
+                String jsonForecast = gson.toJson(weatherList);
+                editor.putString("weatherList", jsonForecast);
+                editor.putString("address", Address);
+                editor.commit();
+
                 recyclerViewForecastWeather.setAdapter(forecastAdapter);
                 forecastAdapter.notifyDataSetChanged();
                 Log.e(Constant.TAG, "loading API" + forecastWeatherItem.toString());
@@ -90,6 +146,33 @@ public class ForecastFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ForecastWeatherItem> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Get data from local");
+                builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        initPreferences();
+                        Gson gson = new Gson();
+                        String jsonForecast = mSharedPreferences.getString("weatherList", "");
+                        String Address = mSharedPreferences.getString("address", "");
+                        Type type = new TypeToken<List<com.example.intership2019.Fragment.ForecastWeather.List>>() {
+                        }.getType();
+                        textAddress.setText(Address);
+                        weatherList = gson.fromJson(jsonForecast, type);
+                        forecastAdapter = new ForecastAdapter(weatherList);
+
+                        recyclerViewForecastWeather.setAdapter(forecastAdapter);
+                        forecastAdapter.notifyDataSetChanged();
+                    }
+                });
+                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.create().show();
                 Log.d(Constant.TAG, "error loading from API");
             }
         });

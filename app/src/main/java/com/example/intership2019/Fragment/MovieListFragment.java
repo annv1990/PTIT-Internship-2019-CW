@@ -1,8 +1,11 @@
 package com.example.intership2019.Fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
@@ -13,8 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.intership2019.Constant;
+import com.example.intership2019.Fragment.Adapter.ForecastAdapter;
 import com.example.intership2019.Fragment.Adapter.MovieListAdapter;
 import com.example.intership2019.Fragment.MovieList.ApiClientMovieList;
 import com.example.intership2019.Fragment.MovieList.ApiInterfaceMovieList;
@@ -24,7 +29,10 @@ import com.example.intership2019.Fragment.MovieList.MovieDetailActivity;
 import com.example.intership2019.Fragment.MovieList.MovieListMain.ListOfMovie;
 import com.example.intership2019.Fragment.MovieList.MovieListMain.MainInfoMovieList;
 import com.example.intership2019.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
@@ -39,6 +47,8 @@ public class MovieListFragment extends Fragment {
     private MainInfoMovieList mainInfoMovieList;
     private DescriptionMovie descriptionMovie;
     private List<ListOfMovie> movieList;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor editor;
 
 //    private Activity mActivityMovieDetail;
 
@@ -61,8 +71,8 @@ public class MovieListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
         recyclerViewMovieList = view.findViewById(R.id.recyclerView_MovieList);
-        recyclerViewMovieList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerViewMovieList.setItemAnimator(new SlideInUpAnimator());
+//        recyclerViewMovieList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+//        recyclerViewMovieList.setItemAnimator(new SlideInUpAnimator());
         recyclerViewMovieList.setHasFixedSize(true);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -70,6 +80,11 @@ public class MovieListFragment extends Fragment {
         recyclerViewMovieList.setLayoutManager(layoutManager);
         loadDataMovie();
         return view;
+    }
+
+    private void initPreferences() {
+        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        editor = mSharedPreferences.edit();
     }
 
     public void loadDataMovie() {
@@ -111,6 +126,12 @@ public class MovieListFragment extends Fragment {
                     });
                 }
 
+                initPreferences();
+                Gson gson = new Gson();
+                String jsonMovie = gson.toJson(movieList);
+                editor.putString("movie", jsonMovie);
+                editor.commit();
+
                 recyclerViewMovieList.setAdapter(movieListAdapter);
                 movieListAdapter.notifyDataSetChanged();
 
@@ -119,6 +140,31 @@ public class MovieListFragment extends Fragment {
 
             @Override
             public void onFailure(Call<MainInfoMovieList> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Get data from local");
+                builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        initPreferences();
+                        Gson gson = new Gson();
+                        String jsonMovie = mSharedPreferences.getString("movie", "");
+                        Type type = new TypeToken<List<ListOfMovie>>() {
+                        }.getType();
+                        movieList = gson.fromJson(jsonMovie, type);
+                        Activity activityMovieDetail = getActivity();
+                        movieListAdapter = new MovieListAdapter(movieList, activityMovieDetail);
+                        recyclerViewMovieList.setAdapter(movieListAdapter);
+                        movieListAdapter.notifyDataSetChanged();
+
+                    }
+                });
+                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.create().show();
                 Log.e(Constant.TAG, "error loading from API" + t.getMessage());
             }
         });

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class Main {
     @SerializedName("temp")
     @Expose
-    private Double temp;
+    private Float temp;
     @SerializedName("pressure")
     @Expose
     private Double pressure;
@@ -20,11 +20,11 @@ public class Main {
     @Expose
     private Double tempMax;
 
-    public Double getTemp() {
+    public Float getTemp() {
         return temp;
     }
 
-    public void setTemp(Double temp) {
+    public void setTemp(Float temp) {
         this.temp = temp;
     }
 

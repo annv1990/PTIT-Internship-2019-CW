@@ -1,6 +1,7 @@
 package com.example.intership2019.Fragment.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
         View contactView = inflater.inflate(R.layout.item_row_forecast, viewGroup, false);
 
         RecyclerViewHolder viewHolder = new RecyclerViewHolder(contactView);
+
         return viewHolder;
     }
 
@@ -54,6 +56,8 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
             icon_weather.setImageResource(R.drawable.iconfinder_cloud_115749);
         } else if (weather.equals(Constant.RAIN)) {
             icon_weather.setImageResource(R.drawable.iconfinder_weather_05_809980);
+        } else if (weather.equals(Constant.CLEAR)) {
+            icon_weather.setImageResource(R.drawable.summer);
         }
     }
 
@@ -82,4 +86,13 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
         listForecastWeather = items;
     }
 
+    public void clear(){
+        listForecastWeather.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<com.example.intership2019.Fragment.ForecastWeather.List> items){
+        listForecastWeather.addAll(items);
+        notifyDataSetChanged();
+    }
 }

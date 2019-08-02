@@ -1,32 +1,31 @@
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout_forecast"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.intership2019.Fragment.ForecastFragment">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textAddressForecastWeather"
+        android:layout_width="132dp"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:paddingBottom="10dp"
+        android:text="TextView"
+        android:textSize="15dp"
+        android:textStyle="italic|bold" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
-        <TextView
-            android:id="@+id/textAddressForecastWeather"
-            android:layout_width="132dp"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:paddingBottom="10dp"
-            android:text="TextView"
-            android:textSize="15dp"
-            android:textStyle="italic|bold" />
-
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_Forecast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>
 
-    </LinearLayout>
 
 
-</android.support.v4.widget.NestedScrollView>
