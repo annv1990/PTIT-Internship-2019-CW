@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class CurrentFragment extends Fragment {
 
     private CurrentWeatherItem exampleCurrentWeather;
     private TextView textMainWeather, textTemp, textHumidity, textAddress;
+    private ImageView imageIconDescription;
     private Switch aSwitch;
     RelativeLayout relativeLayoutCurrentWeather;
     private SharedPreferences mSharedPreferences;
@@ -61,7 +63,7 @@ public class CurrentFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_current, container, false);
         relativeLayoutCurrentWeather = view.findViewById(R.id.relative_layout);
-
+        imageIconDescription = (ImageView) view.findViewById(R.id.iconDescription);
         textHumidity = (TextView) view.findViewById(R.id.textHumidity);
         textTemp = (TextView) view.findViewById(R.id.textTemp);
         textMainWeather = (TextView) view.findViewById(R.id.textMain);
@@ -93,16 +95,20 @@ public class CurrentFragment extends Fragment {
                 textAddress.setText(Address);
                 String Description = exampleCurrentWeather.getWeather().get(0).getDescription();
                 textMainWeather.setText(Description);
-
                 String main = exampleCurrentWeather.getWeather().get(0).getMain();
+
+
                 if (main.equals(Constant.CLEAR)) {
                     relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.currentwall1);
+                    imageIconDescription.setImageResource(R.drawable.iconfinder_weather_clear_118959);
                 } else if (main.equals(Constant.CLOUDS)) {
+                    imageIconDescription.setImageResource(R.drawable.clouds1);
                     relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.may);
                 } else if (main.equals(Constant.RAIN)) {
-                    relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.rain);
+                    imageIconDescription.setImageResource(R.drawable.iconfinder_weather_showers_scattered_118964);
+                    relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.rainthu);
                 }
-                final Float Temp_C = (exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9;
+                final Float Temp_C = new Float((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9));
 
                 aSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -158,10 +164,13 @@ public class CurrentFragment extends Fragment {
                         });
 
                         if (main.equals(Constant.CLEAR)) {
+                            imageIconDescription.setImageResource(R.drawable.iconfinder_weather_clear_118959);
                             relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.currentwall1);
                         } else if (main.equals(Constant.CLOUDS)) {
+                            imageIconDescription.setImageResource(R.drawable.clouds1);
                             relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.may);
                         } else if (main.equals(Constant.RAIN)) {
+                            imageIconDescription.setImageResource(R.drawable.iconfinder_weather_showers_scattered_118964);
                             relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.rain);
                         }
 
@@ -198,8 +207,4 @@ public class CurrentFragment extends Fragment {
         super.onDetach();
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

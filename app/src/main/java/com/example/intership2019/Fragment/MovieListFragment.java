@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +50,8 @@ public class MovieListFragment extends Fragment {
     private List<ListOfMovie> movieList;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor editor;
+    private SwipeRefreshLayout swipeRefreshLayoutMovieList;
+
 
 //    private Activity mActivityMovieDetail;
 
@@ -71,14 +74,25 @@ public class MovieListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
         recyclerViewMovieList = view.findViewById(R.id.recyclerView_MovieList);
-//        recyclerViewMovieList.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-//        recyclerViewMovieList.setItemAnimator(new SlideInUpAnimator());
+        swipeRefreshLayoutMovieList = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefreshMovieList);
+        swipeRefreshLayoutMovieList.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
         recyclerViewMovieList.setHasFixedSize(true);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewMovieList.setLayoutManager(layoutManager);
         loadDataMovie();
+
+        swipeRefreshLayoutMovieList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadDataMovie();
+            }
+        });
         return view;
     }
 
@@ -88,7 +102,7 @@ public class MovieListFragment extends Fragment {
     }
 
     public void loadDataMovie() {
-
+        swipeRefreshLayoutMovieList.setRefreshing(true);
         final ApiInterfaceMovieList apiInterfaceMovieList = ApiClientMovieList.getClient().create(ApiInterfaceMovieList.class);
         final String key = "ba22e944d75a4f64fdba15e60523251f";
         Call<MainInfoMovieList> call = apiInterfaceMovieList.getInfoMovieList(key);
@@ -96,6 +110,7 @@ public class MovieListFragment extends Fragment {
 
             @Override
             public void onResponse(Call<MainInfoMovieList> call, Response<MainInfoMovieList> response) {
+                swipeRefreshLayoutMovieList.setRefreshing(false);
                 mainInfoMovieList = response.body();
                 movieList = response.body().getItems();
                 Activity activityMovieDetail = getActivity();
@@ -108,6 +123,7 @@ public class MovieListFragment extends Fragment {
 
                         @Override
                         public void onResponse(Call<DescriptionMovie> call, Response<DescriptionMovie> response) {
+                            swipeRefreshLayoutMovieList.setRefreshing(false);
 
                             descriptionMovie = response.body();
 
@@ -121,6 +137,7 @@ public class MovieListFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<DescriptionMovie> call, Throwable t) {
+                            swipeRefreshLayoutMovieList.setRefreshing(false);
                             Log.e(Constant.TAG, "error loading from API" + t.getMessage());
                         }
                     });
@@ -140,6 +157,7 @@ public class MovieListFragment extends Fragment {
 
             @Override
             public void onFailure(Call<MainInfoMovieList> call, Throwable t) {
+                swipeRefreshLayoutMovieList.setRefreshing(false);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("Get data from local");
                 builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {

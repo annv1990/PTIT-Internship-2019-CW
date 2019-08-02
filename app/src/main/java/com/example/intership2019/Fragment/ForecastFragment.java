@@ -42,7 +42,7 @@ public class ForecastFragment extends Fragment {
     private ForecastWeatherItem forecastWeatherItem;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor editor;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayoutForecast;
 
 
     public ForecastFragment() {
@@ -69,12 +69,13 @@ public class ForecastFragment extends Fragment {
 
         textAddress = (TextView) view.findViewById(R.id.textAddressForecastWeather);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
+        swipeRefreshLayoutForecast = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
 
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+        swipeRefreshLayoutForecast.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
         recyclerViewForecastWeather = view.findViewById(R.id.rv_Forecast);
         recyclerViewForecastWeather.setHasFixedSize(true);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -82,35 +83,14 @@ public class ForecastFragment extends Fragment {
         recyclerViewForecastWeather.setLayoutManager(layoutManager);
 
         loadDataForecast();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayoutForecast.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                fetchTimelineAsync(0);
                 loadDataForecast();
-
             }
         });
         return view;
     }
- /*   public void fetchTimelineAsync(int page) {
-        // Send the network request to fetch the updated data
-        // `client` here is an instance of Android Async HTTP
-        // getHomeTimeline is an example endpoint.
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
-            public void onSuccess(JSONArray json) {
-                // Remember to CLEAR OUT old items before appending in the new ones
-                forecastAdapter.clear();
-                // ...the data has come back, add new items to your adapter...
-                forecastAdapter.addAll();
-                // Now we call setRefreshing(false) to signal refresh has finished
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            public void onFailure(Throwable e) {
-                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
-            }
-        });
-    }*/
 
     private void initPreferences() {
         mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -118,14 +98,14 @@ public class ForecastFragment extends Fragment {
     }
 
     public void loadDataForecast() {
-        swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayoutForecast.setRefreshing(true);
         ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
         Call<ForecastWeatherItem> call = apiService.getForecastWeather();
         call.enqueue(new Callback<ForecastWeatherItem>() {
             @Override
             public void onResponse(Call<ForecastWeatherItem> call,
                                    Response<ForecastWeatherItem> response) {
-                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayoutForecast.setRefreshing(false);
                 forecastWeatherItem = response.body();
                 weatherList = response.body().getList();
                 String Address = forecastWeatherItem.getCity().getName();
@@ -146,7 +126,7 @@ public class ForecastFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ForecastWeatherItem> call, Throwable t) {
-                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayoutForecast.setRefreshing(false);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("Get data from local");
                 builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {

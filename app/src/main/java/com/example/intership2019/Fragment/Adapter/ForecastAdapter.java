@@ -53,11 +53,11 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
         String weather = item.getWeather().get(0).getMain();
 
         if (weather.equals(Constant.CLOUDS)) {
-            icon_weather.setImageResource(R.drawable.iconfinder_cloud_115749);
+            icon_weather.setImageResource(R.drawable.clouds1);
         } else if (weather.equals(Constant.RAIN)) {
-            icon_weather.setImageResource(R.drawable.iconfinder_weather_05_809980);
+            icon_weather.setImageResource(R.drawable.iconfinder_weather_showers_scattered_118964);
         } else if (weather.equals(Constant.CLEAR)) {
-            icon_weather.setImageResource(R.drawable.summer);
+            icon_weather.setImageResource(R.drawable.iconfinder_weather_clear_118959);
         }
     }
 
