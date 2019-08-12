@@ -1,22 +1,14 @@
 package com.example.intership2019.Fragment.MovieList;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.intership2019.Constant;
 import com.example.intership2019.Fragment.MovieList.MovieDetail.DescriptionMovie;
 import com.example.intership2019.Fragment.MovieList.MovieDetail.Genres;
-import com.example.intership2019.Fragment.MovieList.MovieListMain.MainInfoMovieList;
 import com.example.intership2019.R;
 import com.squareup.picasso.Picasso;
 
@@ -49,16 +41,16 @@ public class MovieDetailActivity extends AppCompatActivity {
         mMovieOverView = bundle.getString("movie_over_view");
         mMovieDuration = bundle.getInt("movie_duration");
 
-        textMovieName = (TextView) findViewById(R.id.textMovieName);
-        textReleaseDuration = (TextView) findViewById(R.id.textRelease_Duration);
-        textOverView = (TextView) findViewById(R.id.textOverView);
-        textGenres = (TextView) findViewById(R.id.textGenres);
-        imageBackgroundMovie = (ImageView) findViewById(R.id.imageBackgroundMovie);
-        imageRateMovie1 = (ImageView) findViewById(R.id.imageRateMovie1);
-        imageRateMovie2 = (ImageView) findViewById(R.id.imageRateMovie2);
-        imageRateMovie3 = (ImageView) findViewById(R.id.imageRateMovie3);
-        imageRateMovie4 = (ImageView) findViewById(R.id.imageRateMovie4);
-        imageRateMovie5 = (ImageView) findViewById(R.id.imageRateMovie5);
+        textMovieName = findViewById(R.id.textMovieName);
+        textReleaseDuration = findViewById(R.id.textRelease_Duration);
+        textOverView = findViewById(R.id.textOverView);
+        textGenres = findViewById(R.id.textGenres);
+        imageBackgroundMovie = findViewById(R.id.imageBackgroundMovie);
+        imageRateMovie1 = findViewById(R.id.imageRateMovie1);
+        imageRateMovie2 = findViewById(R.id.imageRateMovie2);
+        imageRateMovie3 = findViewById(R.id.imageRateMovie3);
+        imageRateMovie4 = findViewById(R.id.imageRateMovie4);
+        imageRateMovie5 = findViewById(R.id.imageRateMovie5);
 
         textMovieName.setText(mMovieName);
         textReleaseDuration.setText(mMovieDuration + " minute");

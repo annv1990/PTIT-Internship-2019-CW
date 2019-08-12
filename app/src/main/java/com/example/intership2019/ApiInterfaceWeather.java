@@ -3,8 +3,6 @@ package com.example.intership2019;
 import com.example.intership2019.Fragment.CurrentWeather.CurrentWeatherItem;
 import com.example.intership2019.Fragment.ForecastWeather.ForecastWeatherItem;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 

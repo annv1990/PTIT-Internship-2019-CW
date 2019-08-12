@@ -1,7 +1,6 @@
 package com.example.intership2019.Fragment.Adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -73,11 +72,11 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            textTempForecastWeather = (TextView) itemView.findViewById(R.id.textTempForecastWeather);
-            textHumidityForecastWeather = (TextView) itemView.findViewById(R.id.textHumidityForecastWeather);
-            textWeatherMainForecastWeather = (TextView) itemView.findViewById(R.id.textWeatherMainForecastWeather);
-            textDateTimeForecastWeather = (TextView) itemView.findViewById(R.id.textDateTimeForecastWeather);
-            icon_weather = (ImageView) itemView.findViewById(R.id.icon_weather);
+            textTempForecastWeather = itemView.findViewById(R.id.textTempForecastWeather);
+            textHumidityForecastWeather = itemView.findViewById(R.id.textHumidityForecastWeather);
+            textWeatherMainForecastWeather = itemView.findViewById(R.id.textWeatherMainForecastWeather);
+            textDateTimeForecastWeather = itemView.findViewById(R.id.textDateTimeForecastWeather);
+            icon_weather = itemView.findViewById(R.id.icon_weather);
 
         }
     }
@@ -86,12 +85,12 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
         listForecastWeather = items;
     }
 
-    public void clear(){
+    public void clear() {
         listForecastWeather.clear();
         notifyDataSetChanged();
     }
 
-    public void addAll(List<com.example.intership2019.Fragment.ForecastWeather.List> items){
+    public void addAll(List<com.example.intership2019.Fragment.ForecastWeather.List> items) {
         listForecastWeather.addAll(items);
         notifyDataSetChanged();
     }

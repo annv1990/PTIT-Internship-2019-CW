@@ -6,20 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.intership2019.Constant;
-import com.example.intership2019.Fragment.MovieList.MovieDetail.DescriptionMovie;
 import com.example.intership2019.Fragment.MovieList.MovieDetailActivity;
 import com.example.intership2019.Fragment.MovieList.MovieListMain.ListOfMovie;
-import com.example.intership2019.MainActivity;
 import com.example.intership2019.R;
 import com.squareup.picasso.Picasso;
 
@@ -66,7 +60,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
 
         if (itemList.getDuration() != null && itemList.getReleaseDate() != null) {
             textReleaseDuration.setText(itemList.getReleaseDate() + ", " + itemList.getDuration() / 60 + " hour " + itemList.getDuration() % 60 + " minute ");
-        }else {
+        } else {
             textReleaseDuration.setText(null);
         }
 
@@ -112,9 +106,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
                 bundle.putInt("movie_Id", itemList.getId());
                 bundle.putString("movie_Name", itemList.getTitle());
                 bundle.putString("movie_over_view", itemList.getOverview());
-                if (itemList.getDuration()!=null) {
+                if (itemList.getDuration() != null) {
                     bundle.putInt("movie_duration", itemList.getDuration());
-                }else bundle.putInt("movie_duration", 0);
+                } else bundle.putInt("movie_duration", 0);
 
                 intent.putExtras(bundle);
                 mActivityMovieDetail.startActivity(intent);
@@ -129,15 +123,15 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
 
         public RecyclerViewHolder(@NonNull final View itemView) {
             super(itemView);
-            textTitleMovie = (TextView) itemView.findViewById(R.id.textTitleMovie);
-            textOverView = (TextView) itemView.findViewById(R.id.textOverView);
-            textReleaseDuration = (TextView) itemView.findViewById(R.id.textRelease_Duration);
-            imageMovie = (ImageView) itemView.findViewById(R.id.imageMovie);
-            imageRateMovie1 = (ImageView) itemView.findViewById(R.id.imageRateMovie1);
-            imageRateMovie2 = (ImageView) itemView.findViewById(R.id.imageRateMovie2);
-            imageRateMovie3 = (ImageView) itemView.findViewById(R.id.imageRateMovie3);
-            imageRateMovie4 = (ImageView) itemView.findViewById(R.id.imageRateMovie4);
-            imageRateMovie5 = (ImageView) itemView.findViewById(R.id.imageRateMovie5);
+            textTitleMovie = itemView.findViewById(R.id.textTitleMovie);
+            textOverView = itemView.findViewById(R.id.textOverView);
+            textReleaseDuration = itemView.findViewById(R.id.textRelease_Duration);
+            imageMovie = itemView.findViewById(R.id.imageMovie);
+            imageRateMovie1 = itemView.findViewById(R.id.imageRateMovie1);
+            imageRateMovie2 = itemView.findViewById(R.id.imageRateMovie2);
+            imageRateMovie3 = itemView.findViewById(R.id.imageRateMovie3);
+            imageRateMovie4 = itemView.findViewById(R.id.imageRateMovie4);
+            imageRateMovie5 = itemView.findViewById(R.id.imageRateMovie5);
 
         }
 

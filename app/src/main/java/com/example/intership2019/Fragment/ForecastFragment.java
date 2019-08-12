@@ -67,9 +67,9 @@ public class ForecastFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        textAddress = (TextView) view.findViewById(R.id.textAddressForecastWeather);
+        textAddress = view.findViewById(R.id.textAddressForecastWeather);
 
-        swipeRefreshLayoutForecast = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
+        swipeRefreshLayoutForecast = view.findViewById(R.id.pullToRefresh);
 
         swipeRefreshLayoutForecast.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,

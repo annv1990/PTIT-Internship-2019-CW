@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,13 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.intership2019.Constant;
-import com.example.intership2019.Fragment.Adapter.ForecastAdapter;
 import com.example.intership2019.Fragment.Adapter.MovieListAdapter;
 import com.example.intership2019.Fragment.MovieList.ApiClientMovieList;
 import com.example.intership2019.Fragment.MovieList.ApiInterfaceMovieList;
 import com.example.intership2019.Fragment.MovieList.MovieDetail.DescriptionMovie;
-import com.example.intership2019.Fragment.MovieList.MovieDetail.Genres;
-import com.example.intership2019.Fragment.MovieList.MovieDetailActivity;
 import com.example.intership2019.Fragment.MovieList.MovieListMain.ListOfMovie;
 import com.example.intership2019.Fragment.MovieList.MovieListMain.MainInfoMovieList;
 import com.example.intership2019.R;
@@ -36,7 +30,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,9 +44,6 @@ public class MovieListFragment extends Fragment {
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor editor;
     private SwipeRefreshLayout swipeRefreshLayoutMovieList;
-
-
-//    private Activity mActivityMovieDetail;
 
     public MovieListFragment() {
         // Required empty public constructor
@@ -148,11 +138,7 @@ public class MovieListFragment extends Fragment {
                     }
                 }
 
-                initPreferences();
-                Gson gson = new Gson();
-                String jsonMovie = gson.toJson(movieList);
-                editor.putString("movie", jsonMovie);
-                editor.commit();
+                saveMoviesList();
 
                 recyclerViewMovieList.setAdapter(movieListAdapter);
                 movieListAdapter.notifyDataSetChanged();
@@ -168,6 +154,7 @@ public class MovieListFragment extends Fragment {
                 builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         initPreferences();
                         Gson gson = new Gson();
                         String jsonMovie = mSharedPreferences.getString("movie", "");
@@ -201,6 +188,14 @@ public class MovieListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private void saveMoviesList() {
+        initPreferences();
+        Gson gson = new Gson();
+        String jsonMovie = gson.toJson(movieList);
+        editor.putString("movie", jsonMovie);
+        editor.commit();
     }
 
 }
