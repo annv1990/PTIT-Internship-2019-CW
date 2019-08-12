@@ -94,7 +94,7 @@ public class MovieListFragment extends Fragment {
     public void loadDataMovie() {
         swipeRefreshLayoutMovieList.setRefreshing(true);
         final ApiInterfaceMovieList apiInterfaceMovieList = ApiClientMovieList.getClient().create(ApiInterfaceMovieList.class);
-        final String key = "ba22e944d75a4f64fdba15e60523251f";
+        final String key = Constant.KEY_API_MOVIE_LIST;
         Call<MainInfoMovieList> call = apiInterfaceMovieList.getInfoMovieList(key);
         call.enqueue(new Callback<MainInfoMovieList>() {
 
@@ -103,8 +103,9 @@ public class MovieListFragment extends Fragment {
                 swipeRefreshLayoutMovieList.setRefreshing(false);
                 mainInfoMovieList = response.body();
 
-                movieList = response.body().getItems();
-
+                if (mainInfoMovieList != null) {
+                    movieList = mainInfoMovieList.getItems();
+                }
                 Activity activityMovieDetail = getActivity();
                 movieListAdapter = new MovieListAdapter(movieList, activityMovieDetail);
 
@@ -143,7 +144,7 @@ public class MovieListFragment extends Fragment {
                 recyclerViewMovieList.setAdapter(movieListAdapter);
                 movieListAdapter.notifyDataSetChanged();
 
-                Log.e(Constant.TAG, "loading API" + mainInfoMovieList.toString());
+                Log.e(Constant.TAG, "loading API");
             }
 
             @Override
@@ -157,7 +158,7 @@ public class MovieListFragment extends Fragment {
 
                         initPreferences();
                         Gson gson = new Gson();
-                        String jsonMovie = mSharedPreferences.getString("movie", "");
+                        String jsonMovie = mSharedPreferences.getString(Constant.KEY_MOVIE_LIST, "");
                         Type type = new TypeToken<List<ListOfMovie>>() {
                         }.getType();
                         movieList = gson.fromJson(jsonMovie, type);
@@ -194,7 +195,7 @@ public class MovieListFragment extends Fragment {
         initPreferences();
         Gson gson = new Gson();
         String jsonMovie = gson.toJson(movieList);
-        editor.putString("movie", jsonMovie);
+        editor.putString(Constant.KEY_MOVIE_LIST, jsonMovie);
         editor.commit();
     }
 

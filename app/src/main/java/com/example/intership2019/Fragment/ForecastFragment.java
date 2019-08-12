@@ -100,6 +100,7 @@ public class ForecastFragment extends Fragment {
     public void loadDataForecast() {
         swipeRefreshLayoutForecast.setRefreshing(true);
         ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
+        final String keyApiWeather = Constant.KEY_API_WEATHER;
         Call<ForecastWeatherItem> call = apiService.getForecastWeather();
         call.enqueue(new Callback<ForecastWeatherItem>() {
             @Override
@@ -107,7 +108,7 @@ public class ForecastFragment extends Fragment {
                                    Response<ForecastWeatherItem> response) {
                 swipeRefreshLayoutForecast.setRefreshing(false);
                 forecastWeatherItem = response.body();
-                weatherList = response.body().getList();
+                weatherList = forecastWeatherItem.getList();
                 String Address = forecastWeatherItem.getCity().getName();
                 textAddress.setText(Address);
                 forecastAdapter = new ForecastAdapter(weatherList);
@@ -115,8 +116,8 @@ public class ForecastFragment extends Fragment {
                 initPreferences();
                 Gson gson = new Gson();
                 String jsonForecast = gson.toJson(weatherList);
-                editor.putString("weatherList", jsonForecast);
-                editor.putString("address", Address);
+                editor.putString(Constant.KEY_WEATHER_LIST, jsonForecast);
+                editor.putString(Constant.KEY_ADDRESS, Address);
                 editor.commit();
 
                 recyclerViewForecastWeather.setAdapter(forecastAdapter);
@@ -134,8 +135,8 @@ public class ForecastFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         initPreferences();
                         Gson gson = new Gson();
-                        String jsonForecast = mSharedPreferences.getString("weatherList", "");
-                        String Address = mSharedPreferences.getString("address", "");
+                        String jsonForecast = mSharedPreferences.getString(Constant.KEY_WEATHER_LIST, "");
+                        String Address = mSharedPreferences.getString(Constant.KEY_ADDRESS, "");
                         Type type = new TypeToken<List<com.example.intership2019.Fragment.ForecastWeather.List>>() {
                         }.getType();
                         textAddress.setText(Address);

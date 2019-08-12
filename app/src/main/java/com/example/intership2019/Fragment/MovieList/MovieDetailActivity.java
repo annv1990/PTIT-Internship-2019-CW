@@ -36,10 +36,10 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        mMovieId = bundle.getInt("movie_Id", 0);
-        mMovieName = bundle.getString("movie_Name");
-        mMovieOverView = bundle.getString("movie_over_view");
-        mMovieDuration = bundle.getInt("movie_duration");
+        mMovieId = bundle.getInt(Constant.KEY_MOVIE_ID, 0);
+        mMovieName = bundle.getString(Constant.KEY_MOVIE_NAME);
+        mMovieOverView = bundle.getString(Constant.KEY_MOVIE_OVERVIEW);
+        mMovieDuration = bundle.getInt(Constant.KEY_MOVIE_DURATION);
 
         textMovieName = findViewById(R.id.textMovieName);
         textReleaseDuration = findViewById(R.id.textRelease_Duration);
@@ -53,10 +53,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         imageRateMovie5 = findViewById(R.id.imageRateMovie5);
 
         textMovieName.setText(mMovieName);
-        textReleaseDuration.setText(mMovieDuration + " minute");
+        textReleaseDuration.setText(mMovieDuration + Constant.MINUTE);
         textOverView.setText(mMovieOverView);
-
-        Log.d(Constant.TAG, "movieID ");
 
         loadDataMovieDetailActivity();
     }
@@ -64,7 +62,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     public void loadDataMovieDetailActivity() {
 
         final ApiInterfaceMovieList apiInterfaceMovieList = ApiClientMovieList.getClient().create(ApiInterfaceMovieList.class);
-        final String key = "ba22e944d75a4f64fdba15e60523251f";
+        final String key = Constant.KEY_API_MOVIE_LIST;
         Call<DescriptionMovie> callDescriptionMovie = apiInterfaceMovieList.getDescriptionMovie(mMovieId, key);
         callDescriptionMovie.enqueue(new Callback<DescriptionMovie>() {
             @Override
@@ -82,7 +80,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 } else textGenres.setText(null);
 
                 Picasso.get().
-                        load("https://image.tmdb.org/t/p/w500" + descriptionMovie.getBackdropPath())
+                        load(Constant.LINK_IMAGE_MOVIE + descriptionMovie.getBackdropPath())
                         .placeholder(R.drawable.ic_launcher_background).fit().into(imageBackgroundMovie);
 
                 if (descriptionMovie.getVoteAverage() <= 2) {

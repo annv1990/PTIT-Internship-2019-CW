@@ -37,16 +37,16 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
         com.example.intership2019.Fragment.ForecastWeather.List item = listForecastWeather.get(position);
 
         TextView textTempForecastWeather = recyclerViewHolder.textTempForecastWeather;
-        textTempForecastWeather.setText("Temperature: " + (new Integer((int) ((item.getMain().getTemp() - 32) * 5 / 9)) + "°C"));
+        textTempForecastWeather.setText(Constant.TEMPERATURE + (new Integer((int) ((item.getMain().getTemp() - 32) * 5 / 9)) + "°C"));
 
         TextView textHumidityForecastWeather = recyclerViewHolder.textHumidityForecastWeather;
-        textHumidityForecastWeather.setText("Humidity: " + item.getMain().getHumidity() + "%");
+        textHumidityForecastWeather.setText(Constant.HUMIDITY + item.getMain().getHumidity() + "%");
 
         TextView textWeatherMainForecastWeather = recyclerViewHolder.textWeatherMainForecastWeather;
-        textWeatherMainForecastWeather.setText("Weather: " + item.getWeather().get(0).getMain());
+        textWeatherMainForecastWeather.setText(Constant.WEATHER + item.getWeather().get(0).getMain());
 
         TextView textDateTimeForecastWeather = recyclerViewHolder.textDateTimeForecastWeather;
-        textDateTimeForecastWeather.setText("Date: " + item.getDtTxt());
+        textDateTimeForecastWeather.setText(Constant.DATE + item.getDtTxt());
 
         ImageView icon_weather = recyclerViewHolder.icon_weather;
         String weather = item.getWeather().get(0).getMain();

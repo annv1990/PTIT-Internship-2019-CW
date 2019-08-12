@@ -110,9 +110,6 @@ public class CurrentFragment extends Fragment {
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mHour));
         calendar.set(Calendar.MINUTE, Integer.parseInt(mMinute));
         calendar.set(Calendar.SECOND, 0);
-        Log.d("settime", calendar.get(Calendar.HOUR) + ":");
-        Log.d("settime", calendar.get(Calendar.MINUTE) + ":");
-        Log.d("settime", String.valueOf(calendar.get(Calendar.SECOND)));
 
         Intent myIntent = new Intent(getActivity(), AlarmBroadCastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
@@ -127,12 +124,13 @@ public class CurrentFragment extends Fragment {
     public void loadDataCurrent() {
 
         ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
+        String keyApiWeather = Constant.KEY_API_WEATHER;
         Call<CurrentWeatherItem> call = apiService.getCurrentWeather();
         call.enqueue(new Callback<CurrentWeatherItem>() {
             @Override
             public void onResponse(Call<CurrentWeatherItem> call, Response<CurrentWeatherItem> response) {
-                exampleCurrentWeather = response.body();
 
+                exampleCurrentWeather = response.body();
                 final Float Temp = exampleCurrentWeather.getMain().getTemp();
                 final Float Temp_C = new Float((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9));
                 textTemp.setText(Temp + Constant.F_TEMP);
@@ -168,12 +166,12 @@ public class CurrentFragment extends Fragment {
                 });
 
                 initPreferences();
-                editor.putFloat("temp_F", Temp);
-                editor.putFloat("temp_C", Temp_C);
-                editor.putString("humidity", Humidity);
-                editor.putString("address", Address);
-                editor.putString("description", Description);
-                editor.putString("main", main);
+                editor.putFloat(Constant.KEY_TEMP_F, Temp);
+                editor.putFloat(Constant.KEY_TEMP_C, Temp_C);
+                editor.putString(Constant.KEY_HUMIDITY, Humidity);
+                editor.putString(Constant.KEY_ADDRESS, Address);
+                editor.putString(Constant.KEY_DESCRIPTION, Description);
+                editor.putString(Constant.KEY_WEATHER_MAIN, main);
 
                 Log.e(Constant.TAG, "posts loaded from API");
             }
@@ -187,12 +185,12 @@ public class CurrentFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         initPreferences();
 
-                        final Float Temp = mSharedPreferences.getFloat("temp_F", 0);
-                        final Float Temp_C = mSharedPreferences.getFloat("temp_C", 0);
-                        String Humidity = mSharedPreferences.getString("humidity", "");
-                        String Address = mSharedPreferences.getString("address", "");
-                        String Description = mSharedPreferences.getString("description", "");
-                        String main = mSharedPreferences.getString("main", "");
+                        final Float Temp = mSharedPreferences.getFloat(Constant.KEY_TEMP_F, 0);
+                        final Float Temp_C = mSharedPreferences.getFloat(Constant.KEY_TEMP_C, 0);
+                        String Humidity = mSharedPreferences.getString(Constant.KEY_HUMIDITY, "");
+                        String Address = mSharedPreferences.getString(Constant.KEY_ADDRESS, "");
+                        String Description = mSharedPreferences.getString(Constant.KEY_DESCRIPTION, "");
+                        String main = mSharedPreferences.getString(Constant.KEY_WEATHER_MAIN, "");
 
                         textTemp.setText(Temp + Constant.F_TEMP);
 

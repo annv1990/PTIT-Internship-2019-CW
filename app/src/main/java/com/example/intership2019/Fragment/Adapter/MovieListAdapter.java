@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.intership2019.Constant;
 import com.example.intership2019.Fragment.MovieList.MovieDetailActivity;
 import com.example.intership2019.Fragment.MovieList.MovieListMain.ListOfMovie;
 import com.example.intership2019.R;
@@ -67,7 +68,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
 
         ImageView imageMovie = recyclerViewHolder.imageMovie;
         Picasso.get().
-                load("https://image.tmdb.org/t/p/w500" + itemList.getPosterPath()).
+                load(Constant.LINK_IMAGE_MOVIE + itemList.getPosterPath()).
                 placeholder(R.drawable.ic_launcher_background).fit().into(imageMovie);
 
         ImageView imageRateMovie1 = recyclerViewHolder.imageRateMovie1;
@@ -103,12 +104,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
             public void onItemClick() {
                 Intent intent = new Intent(mActivityMovieDetail, MovieDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("movie_Id", itemList.getId());
-                bundle.putString("movie_Name", itemList.getTitle());
-                bundle.putString("movie_over_view", itemList.getOverview());
+                bundle.putInt(Constant.KEY_MOVIE_ID, itemList.getId());
+                bundle.putString(Constant.KEY_MOVIE_NAME, itemList.getTitle());
+                bundle.putString(Constant.KEY_MOVIE_OVERVIEW, itemList.getOverview());
                 if (itemList.getDuration() != null) {
-                    bundle.putInt("movie_duration", itemList.getDuration());
-                } else bundle.putInt("movie_duration", 0);
+                    bundle.putInt(Constant.KEY_MOVIE_DURATION, itemList.getDuration());
+                } else bundle.putInt(Constant.KEY_MOVIE_DURATION, 0);
 
                 intent.putExtras(bundle);
                 mActivityMovieDetail.startActivity(intent);
