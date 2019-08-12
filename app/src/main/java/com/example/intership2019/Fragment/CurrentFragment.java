@@ -102,7 +102,6 @@ public class CurrentFragment extends Fragment {
         aSwitch = (Switch) view.findViewById(R.id.switch_CF);
         editTextTime = (EditText) view.findViewById(R.id.editTextTime);
         buttonSetTime = (Button) view.findViewById(R.id.buttonSetTime);
-        buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
 
         buttonSetTime.setOnClickListener(new View.OnClickListener() {
             @Override
