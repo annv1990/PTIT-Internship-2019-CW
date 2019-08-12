@@ -50,6 +50,13 @@ public class CurrentFragment extends Fragment {
     private static int Id = 0;
     private AlarmManager alarmManager;
 
+    private Float Temp;
+    private Float Temp_C;
+    private String Humidity;
+    private String Description;
+    private String Address;
+    private String WeatherMain;
+
     public CurrentFragment() {
         // Required empty public constructor
     }
@@ -59,6 +66,11 @@ public class CurrentFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -125,30 +137,30 @@ public class CurrentFragment extends Fragment {
 
         ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
         String keyApiWeather = Constant.KEY_API_WEATHER;
-        Call<CurrentWeatherItem> call = apiService.getCurrentWeather();
+        Call<CurrentWeatherItem> call = apiService.getCurrentWeather(keyApiWeather);
         call.enqueue(new Callback<CurrentWeatherItem>() {
             @Override
             public void onResponse(Call<CurrentWeatherItem> call, Response<CurrentWeatherItem> response) {
 
                 exampleCurrentWeather = response.body();
-                final Float Temp = exampleCurrentWeather.getMain().getTemp();
-                final Float Temp_C = new Float((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9));
+                Temp = exampleCurrentWeather.getMain().getTemp();
+                Temp_C = new Float((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9));
                 textTemp.setText(Temp + Constant.F_TEMP);
-                String Humidity = exampleCurrentWeather.getMain().getHumidity() + "%";
+                Humidity = exampleCurrentWeather.getMain().getHumidity() + "%";
                 textHumidity.setText(Humidity);
-                String Address = exampleCurrentWeather.getName() + "," + exampleCurrentWeather.getSys().getCountry();
+                Address = exampleCurrentWeather.getName() + "," + exampleCurrentWeather.getSys().getCountry();
                 textAddress.setText(Address);
-                final String Description = exampleCurrentWeather.getWeather().get(0).getDescription();
+                Description = exampleCurrentWeather.getWeather().get(0).getDescription();
                 textMainWeather.setText(Description);
-                String main = exampleCurrentWeather.getWeather().get(0).getMain();
+                WeatherMain = exampleCurrentWeather.getWeather().get(0).getMain();
 
-                if (main.equals(Constant.CLEAR)) {
+                if (WeatherMain.equals(Constant.CLEAR)) {
                     relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.currentwall1);
                     imageIconDescription.setImageResource(R.drawable.iconfinder_weather_clear_118959);
-                } else if (main.equals(Constant.CLOUDS)) {
+                } else if (WeatherMain.equals(Constant.CLOUDS)) {
                     imageIconDescription.setImageResource(R.drawable.clouds1);
                     relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.may);
-                } else if (main.equals(Constant.RAIN)) {
+                } else if (WeatherMain.equals(Constant.RAIN)) {
                     imageIconDescription.setImageResource(R.drawable.iconfinder_weather_showers_scattered_118964);
                     relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.rainthu);
                 }
@@ -165,89 +177,87 @@ public class CurrentFragment extends Fragment {
                     }
                 });
 
-                initPreferences();
-                editor.putFloat(Constant.KEY_TEMP_F, Temp);
-                editor.putFloat(Constant.KEY_TEMP_C, Temp_C);
-                editor.putString(Constant.KEY_HUMIDITY, Humidity);
-                editor.putString(Constant.KEY_ADDRESS, Address);
-                editor.putString(Constant.KEY_DESCRIPTION, Description);
-                editor.putString(Constant.KEY_WEATHER_MAIN, main);
+                saveDataWeather();
 
                 Log.e(Constant.TAG, "posts loaded from API");
             }
 
             @Override
             public void onFailure(Call<CurrentWeatherItem> call, Throwable t) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Get data from local");
-                builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        initPreferences();
-
-                        final Float Temp = mSharedPreferences.getFloat(Constant.KEY_TEMP_F, 0);
-                        final Float Temp_C = mSharedPreferences.getFloat(Constant.KEY_TEMP_C, 0);
-                        String Humidity = mSharedPreferences.getString(Constant.KEY_HUMIDITY, "");
-                        String Address = mSharedPreferences.getString(Constant.KEY_ADDRESS, "");
-                        String Description = mSharedPreferences.getString(Constant.KEY_DESCRIPTION, "");
-                        String main = mSharedPreferences.getString(Constant.KEY_WEATHER_MAIN, "");
-
-                        textTemp.setText(Temp + Constant.F_TEMP);
-
-                        aSwitch.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                boolean on = ((Switch) v).isChecked();
-                                if (on) {
-                                    textTemp.setText(Temp_C + Constant.C_TEMP);
-                                } else {
-                                    textTemp.setText(Temp + Constant.F_TEMP);
-                                }
-                            }
-                        });
-
-                        if (main.equals(Constant.CLEAR)) {
-                            imageIconDescription.setImageResource(R.drawable.iconfinder_weather_clear_118959);
-                            relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.currentwall1);
-                        } else if (main.equals(Constant.CLOUDS)) {
-                            imageIconDescription.setImageResource(R.drawable.clouds1);
-                            relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.may);
-                        } else if (main.equals(Constant.RAIN)) {
-                            imageIconDescription.setImageResource(R.drawable.iconfinder_weather_showers_scattered_118964);
-                            relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.rain);
-                        }
-
-                        textAddress.setText(Address);
-                        textHumidity.setText(Humidity);
-                        textMainWeather.setText(Description);
-
-                    }
-                });
-                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.create().show();
+                Dialog();
                 Log.e(Constant.TAG, "error loading from API" + t.getMessage());
             }
         });
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private void Dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Get data from local");
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                getDataWeather();
+
+                textTemp.setText(Temp + Constant.F_TEMP);
+
+                aSwitch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean on = ((Switch) v).isChecked();
+                        if (on) {
+                            textTemp.setText(Temp_C + Constant.C_TEMP);
+                        } else {
+                            textTemp.setText(Temp + Constant.F_TEMP);
+                        }
+                    }
+                });
+
+                if (WeatherMain.equals(Constant.CLEAR)) {
+                    imageIconDescription.setImageResource(R.drawable.iconfinder_weather_clear_118959);
+                    relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.currentwall1);
+                } else if (WeatherMain.equals(Constant.CLOUDS)) {
+                    imageIconDescription.setImageResource(R.drawable.clouds1);
+                    relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.may);
+                } else if (WeatherMain.equals(Constant.RAIN)) {
+                    imageIconDescription.setImageResource(R.drawable.iconfinder_weather_showers_scattered_118964);
+                    relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.rain);
+                }
+
+                textAddress.setText(Address);
+                textHumidity.setText(Humidity);
+                textMainWeather.setText(Description);
+
+            }
+        });
+        builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.create().show();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    private void saveDataWeather() {
+        initPreferences();
+        editor.putFloat(Constant.KEY_TEMP_F, Temp);
+        editor.putFloat(Constant.KEY_TEMP_C, Temp_C);
+        editor.putString(Constant.KEY_HUMIDITY, Humidity);
+        editor.putString(Constant.KEY_ADDRESS, Address);
+        editor.putString(Constant.KEY_DESCRIPTION, Description);
+        editor.putString(Constant.KEY_WEATHER_MAIN, WeatherMain);
+        editor.commit();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
+    private void getDataWeather() {
+        initPreferences();
 
+        Temp = mSharedPreferences.getFloat(Constant.KEY_TEMP_F, 0);
+        Temp_C = mSharedPreferences.getFloat(Constant.KEY_TEMP_C, 0);
+        Humidity = mSharedPreferences.getString(Constant.KEY_HUMIDITY, "");
+        Address = mSharedPreferences.getString(Constant.KEY_ADDRESS, "");
+        Description = mSharedPreferences.getString(Constant.KEY_DESCRIPTION, "");
+        WeatherMain = mSharedPreferences.getString(Constant.KEY_WEATHER_MAIN, "");
+    }
 }

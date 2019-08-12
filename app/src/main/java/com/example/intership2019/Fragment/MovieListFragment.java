@@ -56,7 +56,6 @@ public class MovieListFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,10 +85,6 @@ public class MovieListFragment extends Fragment {
         return view;
     }
 
-    private void initPreferences() {
-        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
-        editor = mSharedPreferences.edit();
-    }
 
     public void loadDataMovie() {
         swipeRefreshLayoutMovieList.setRefreshing(true);
@@ -141,54 +136,41 @@ public class MovieListFragment extends Fragment {
 
                 saveMoviesList();
 
-                recyclerViewMovieList.setAdapter(movieListAdapter);
-                movieListAdapter.notifyDataSetChanged();
-
                 Log.e(Constant.TAG, "loading API");
             }
 
             @Override
             public void onFailure(Call<MainInfoMovieList> call, Throwable t) {
                 swipeRefreshLayoutMovieList.setRefreshing(false);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Get data from local");
-                builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        initPreferences();
-                        Gson gson = new Gson();
-                        String jsonMovie = mSharedPreferences.getString(Constant.KEY_MOVIE_LIST, "");
-                        Type type = new TypeToken<List<ListOfMovie>>() {
-                        }.getType();
-                        movieList = gson.fromJson(jsonMovie, type);
-                        Activity activityMovieDetail = getActivity();
-                        movieListAdapter = new MovieListAdapter(movieList, activityMovieDetail);
-                        recyclerViewMovieList.setAdapter(movieListAdapter);
-                        movieListAdapter.notifyDataSetChanged();
-
-                    }
-                });
-                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.create().show();
+                Dialog();
                 Log.e(Constant.TAG, "error loading from API" + t.getMessage());
             }
         });
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    private void Dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Get data from local");
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                getMovieList();
+
+            }
+        });
+        builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.create().show();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
+    private void initPreferences() {
+        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        editor = mSharedPreferences.edit();
     }
 
     private void saveMoviesList() {
@@ -197,6 +179,21 @@ public class MovieListFragment extends Fragment {
         String jsonMovie = gson.toJson(movieList);
         editor.putString(Constant.KEY_MOVIE_LIST, jsonMovie);
         editor.commit();
+        recyclerViewMovieList.setAdapter(movieListAdapter);
+        movieListAdapter.notifyDataSetChanged();
+    }
+
+    private void getMovieList() {
+        initPreferences();
+        Gson gson = new Gson();
+        String jsonMovie = mSharedPreferences.getString(Constant.KEY_MOVIE_LIST, "");
+        Type type = new TypeToken<List<ListOfMovie>>() {
+        }.getType();
+        movieList = gson.fromJson(jsonMovie, type);
+        Activity activityMovieDetail = getActivity();
+        movieListAdapter = new MovieListAdapter(movieList, activityMovieDetail);
+        recyclerViewMovieList.setAdapter(movieListAdapter);
+        movieListAdapter.notifyDataSetChanged();
     }
 
 }

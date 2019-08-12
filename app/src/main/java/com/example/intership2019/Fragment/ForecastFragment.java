@@ -1,6 +1,7 @@
 package com.example.intership2019.Fragment;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -43,6 +44,7 @@ public class ForecastFragment extends Fragment {
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor editor;
     private SwipeRefreshLayout swipeRefreshLayoutForecast;
+    private String Address;
 
 
     public ForecastFragment() {
@@ -92,16 +94,12 @@ public class ForecastFragment extends Fragment {
         return view;
     }
 
-    private void initPreferences() {
-        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
-        editor = mSharedPreferences.edit();
-    }
 
     public void loadDataForecast() {
         swipeRefreshLayoutForecast.setRefreshing(true);
         ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
         final String keyApiWeather = Constant.KEY_API_WEATHER;
-        Call<ForecastWeatherItem> call = apiService.getForecastWeather();
+        Call<ForecastWeatherItem> call = apiService.getForecastWeather(keyApiWeather);
         call.enqueue(new Callback<ForecastWeatherItem>() {
             @Override
             public void onResponse(Call<ForecastWeatherItem> call,
@@ -109,54 +107,73 @@ public class ForecastFragment extends Fragment {
                 swipeRefreshLayoutForecast.setRefreshing(false);
                 forecastWeatherItem = response.body();
                 weatherList = forecastWeatherItem.getList();
-                String Address = forecastWeatherItem.getCity().getName();
+                Address = forecastWeatherItem.getCity().getName();
                 textAddress.setText(Address);
                 forecastAdapter = new ForecastAdapter(weatherList);
 
-                initPreferences();
-                Gson gson = new Gson();
-                String jsonForecast = gson.toJson(weatherList);
-                editor.putString(Constant.KEY_WEATHER_LIST, jsonForecast);
-                editor.putString(Constant.KEY_ADDRESS, Address);
-                editor.commit();
+                saveForecastWeather();
 
-                recyclerViewForecastWeather.setAdapter(forecastAdapter);
-                forecastAdapter.notifyDataSetChanged();
+
                 Log.e(Constant.TAG, "loading API" + forecastWeatherItem.toString());
             }
 
             @Override
             public void onFailure(Call<ForecastWeatherItem> call, Throwable t) {
                 swipeRefreshLayoutForecast.setRefreshing(false);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Get data from local");
-                builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        initPreferences();
-                        Gson gson = new Gson();
-                        String jsonForecast = mSharedPreferences.getString(Constant.KEY_WEATHER_LIST, "");
-                        String Address = mSharedPreferences.getString(Constant.KEY_ADDRESS, "");
-                        Type type = new TypeToken<List<com.example.intership2019.Fragment.ForecastWeather.List>>() {
-                        }.getType();
-                        textAddress.setText(Address);
-                        weatherList = gson.fromJson(jsonForecast, type);
-                        forecastAdapter = new ForecastAdapter(weatherList);
-
-                        recyclerViewForecastWeather.setAdapter(forecastAdapter);
-                        forecastAdapter.notifyDataSetChanged();
-                    }
-                });
-                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.create().show();
+                Dialog();
                 Log.d(Constant.TAG, "error loading from API");
             }
         });
+    }
+
+    private void Dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Get data from local");
+        builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                getDataForecastWeather();
+
+            }
+        });
+        builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void initPreferences() {
+        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        editor = mSharedPreferences.edit();
+    }
+
+    private void saveForecastWeather() {
+        initPreferences();
+        Gson gson = new Gson();
+        String jsonForecast = gson.toJson(weatherList);
+        editor.putString(Constant.KEY_WEATHER_LIST, jsonForecast);
+        editor.putString(Constant.KEY_ADDRESS, Address);
+        editor.commit();
+        recyclerViewForecastWeather.setAdapter(forecastAdapter);
+        forecastAdapter.notifyDataSetChanged();
+    }
+
+    private void getDataForecastWeather() {
+        initPreferences();
+        Gson gson = new Gson();
+        String jsonForecast = mSharedPreferences.getString(Constant.KEY_WEATHER_LIST, "");
+        String Address = mSharedPreferences.getString(Constant.KEY_ADDRESS, "");
+        Type type = new TypeToken<List<com.example.intership2019.Fragment.ForecastWeather.List>>() {
+        }.getType();
+        textAddress.setText(Address);
+        weatherList = gson.fromJson(jsonForecast, type);
+        forecastAdapter = new ForecastAdapter(weatherList);
+        recyclerViewForecastWeather.setAdapter(forecastAdapter);
+        forecastAdapter.notifyDataSetChanged();
     }
 
 }

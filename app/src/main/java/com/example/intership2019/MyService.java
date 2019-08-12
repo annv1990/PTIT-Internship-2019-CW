@@ -54,7 +54,7 @@ public class MyService extends IntentService {
     public void loadDataNotification() {
         ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
         final String keyApiWeather = Constant.KEY_API_WEATHER;
-        Call<CurrentWeatherItem> call = apiService.getCurrentWeather();
+        Call<CurrentWeatherItem> call = apiService.getCurrentWeather(keyApiWeather);
         call.enqueue(new Callback<CurrentWeatherItem>() {
             @Override
             public void onResponse(Call<CurrentWeatherItem> call, Response<CurrentWeatherItem> response) {
