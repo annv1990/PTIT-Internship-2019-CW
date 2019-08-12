@@ -1,22 +1,39 @@
 package com.example.intership2019.Fragment;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.intership2019.AlarmBroadCastReceiver;
 import com.example.intership2019.ApiClientWeather;
 import com.example.intership2019.ApiInterfaceWeather;
 import com.example.intership2019.Constant;
@@ -24,25 +41,39 @@ import com.example.intership2019.Fragment.Adapter.ForecastAdapter;
 import com.example.intership2019.Fragment.CurrentWeather.CurrentWeatherItem;
 
 import com.example.intership2019.Fragment.ForecastWeather.List;
+import com.example.intership2019.MainActivity;
 import com.example.intership2019.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 public class CurrentFragment extends Fragment {
 
     private CurrentWeatherItem exampleCurrentWeather;
     private TextView textMainWeather, textTemp, textHumidity, textAddress;
+    private EditText editTextTime;
+    private Button buttonSetTime, buttonCancel;
     private ImageView imageIconDescription;
     private Switch aSwitch;
-    RelativeLayout relativeLayoutCurrentWeather;
+    private RelativeLayout relativeLayoutCurrentWeather;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor editor;
+    private static int Id = 0;
+    private AlarmManager alarmManager;
+    PendingIntent pendingIntent;
 
 
     public CurrentFragment() {
@@ -68,8 +99,21 @@ public class CurrentFragment extends Fragment {
         textTemp = (TextView) view.findViewById(R.id.textTemp);
         textMainWeather = (TextView) view.findViewById(R.id.textMain);
         textAddress = (TextView) view.findViewById(R.id.textAddress);
-
         aSwitch = (Switch) view.findViewById(R.id.switch_CF);
+        editTextTime = (EditText) view.findViewById(R.id.editTextTime);
+        buttonSetTime = (Button) view.findViewById(R.id.buttonSetTime);
+        buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
+
+        buttonSetTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    startAlarm(true, true);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         loadDataCurrent();
         return view;
     }
@@ -79,21 +123,59 @@ public class CurrentFragment extends Fragment {
         editor = mSharedPreferences.edit();
     }
 
+
+    private void startAlarm(boolean isNotification, boolean isRepeat) throws ParseException {
+
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        // SET TIME HERE
+        String time = editTextTime.getText().toString();
+        Log.d(Constant.TAG, time);
+        String mHour = time.split(":")[0];
+        String mMinute = time.split(":")[1];
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mHour));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(mMinute));
+        calendar.set(Calendar.SECOND, 0);
+        Log.d("settime", calendar.get(Calendar.HOUR) + ":");
+        Log.d("settime", calendar.get(Calendar.MINUTE) + ":");
+        Log.d("settime", String.valueOf(calendar.get(Calendar.SECOND)));
+
+        Intent myIntent = new Intent(getActivity(), AlarmBroadCastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
+
+
+        if (!isRepeat)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + 1000, pendingIntent);
+        else
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(), pendingIntent);
+    }
+
+
+//    private void cancelAlarm() {
+//        alarmManager.cancel(pendingIntent);
+//        Toast.makeText(getActivity(), "Alarm Cancelled", Toast.LENGTH_LONG).show();
+//    }
+
     public void loadDataCurrent() {
+
         ApiInterfaceWeather apiService = ApiClientWeather.getClient().create(ApiInterfaceWeather.class);
         Call<CurrentWeatherItem> call = apiService.getCurrentWeather();
         call.enqueue(new Callback<CurrentWeatherItem>() {
             @Override
             public void onResponse(Call<CurrentWeatherItem> call, Response<CurrentWeatherItem> response) {
-
                 exampleCurrentWeather = response.body();
+
                 final Float Temp = exampleCurrentWeather.getMain().getTemp();
+                final Float Temp_C = new Float((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9));
                 textTemp.setText(Temp + Constant.F_TEMP);
                 String Humidity = exampleCurrentWeather.getMain().getHumidity() + "%";
                 textHumidity.setText(Humidity);
                 String Address = exampleCurrentWeather.getName() + "," + exampleCurrentWeather.getSys().getCountry();
                 textAddress.setText(Address);
-                String Description = exampleCurrentWeather.getWeather().get(0).getDescription();
+                final String Description = exampleCurrentWeather.getWeather().get(0).getDescription();
                 textMainWeather.setText(Description);
                 String main = exampleCurrentWeather.getWeather().get(0).getMain();
 
@@ -108,7 +190,6 @@ public class CurrentFragment extends Fragment {
                     imageIconDescription.setImageResource(R.drawable.iconfinder_weather_showers_scattered_118964);
                     relativeLayoutCurrentWeather.setBackgroundResource(R.drawable.rainthu);
                 }
-                final Float Temp_C = new Float((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9));
 
                 aSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -121,6 +202,17 @@ public class CurrentFragment extends Fragment {
                         }
                     }
                 });
+
+
+
+
+
+//                buttonCancel.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        cancelAlarm();
+//                    }
+//                });
 
                 initPreferences();
                 editor.putFloat("temp_F", Temp);

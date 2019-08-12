@@ -112,35 +112,40 @@ public class MovieListFragment extends Fragment {
             public void onResponse(Call<MainInfoMovieList> call, Response<MainInfoMovieList> response) {
                 swipeRefreshLayoutMovieList.setRefreshing(false);
                 mainInfoMovieList = response.body();
+
                 movieList = response.body().getItems();
+
                 Activity activityMovieDetail = getActivity();
                 movieListAdapter = new MovieListAdapter(movieList, activityMovieDetail);
-                for (final ListOfMovie movie : movieList) {
-                    int movieId = movie.getId();
 
-                    Call<DescriptionMovie> callDetail = apiInterfaceMovieList.getDescriptionMovie(movieId, key);
-                    callDetail.enqueue(new Callback<DescriptionMovie>() {
+                if (movieList != null) {
+                    for (final ListOfMovie movie : movieList) {
+                        int movieId = movie.getId();
 
-                        @Override
-                        public void onResponse(Call<DescriptionMovie> call, Response<DescriptionMovie> response) {
-                            swipeRefreshLayoutMovieList.setRefreshing(false);
+                        Call<DescriptionMovie> callDetail = apiInterfaceMovieList.getDescriptionMovie(movieId, key);
+                        callDetail.enqueue(new Callback<DescriptionMovie>() {
 
-                            descriptionMovie = response.body();
+                            @Override
+                            public void onResponse(Call<DescriptionMovie> call, Response<DescriptionMovie> response) {
+                                swipeRefreshLayoutMovieList.setRefreshing(false);
 
-                            if (descriptionMovie != null && descriptionMovie.getRuntime() != null) {
-                                //gán duration bằng runtime
-                                movie.setDuration(descriptionMovie.getRuntime());
+                                descriptionMovie = response.body();
+
+                                if (descriptionMovie != null && descriptionMovie.getRuntime() != null) {
+                                    //gán duration bằng runtime
+                                    movie.setDuration(descriptionMovie.getRuntime());
+                                }
+                                movieListAdapter.notifyDataSetChanged();
+                                Log.e(Constant.TAG, "loading API" + mainInfoMovieList.toString());
                             }
-                            movieListAdapter.notifyDataSetChanged();
-                            Log.e(Constant.TAG, "loading API" + mainInfoMovieList.toString());
-                        }
 
-                        @Override
-                        public void onFailure(Call<DescriptionMovie> call, Throwable t) {
-                            swipeRefreshLayoutMovieList.setRefreshing(false);
-                            Log.e(Constant.TAG, "error loading from API" + t.getMessage());
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<DescriptionMovie> call, Throwable t) {
+                                swipeRefreshLayoutMovieList.setRefreshing(false);
+                                Log.e(Constant.TAG, "error loading from API" + t.getMessage());
+                            }
+                        });
+                    }
                 }
 
                 initPreferences();

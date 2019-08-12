@@ -8,8 +8,7 @@
     <RelativeLayout
         android:id="@+id/relative_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/crop">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textTemp"
@@ -155,6 +154,45 @@
             android:textColor="#f000"
             android:textSize="15dp"
             android:textStyle="italic|bold" />
+
+        <EditText
+            android:id="@+id/editTextTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="147dp"
+            android:layout_marginBottom="139dp"
+            android:ems="10"
+            android:hint="Notification loop time "
+            android:inputType="time" />
+
+        <Button
+            android:id="@+id/buttonSetTime"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="38dp"
+            android:layout_marginBottom="140dp"
+            android:text="OK"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+<!--        <Button
+            android:id="@+id/buttonCancel"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="38dp"
+            android:layout_marginBottom="101dp"
+            android:text="Cancel"
+            android:textAlignment="center"
+            android:textStyle="bold|italic" />-->
 
 
     </RelativeLayout>
