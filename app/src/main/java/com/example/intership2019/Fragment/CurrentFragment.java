@@ -3,6 +3,7 @@ package com.example.intership2019.Fragment;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.intership2019.AlarmBroadCastReceiver;
@@ -30,7 +32,9 @@ import com.example.intership2019.Fragment.CurrentWeather.CurrentWeatherItem;
 import com.example.intership2019.R;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,8 +43,8 @@ import retrofit2.Response;
 public class CurrentFragment extends Fragment {
 
     private CurrentWeatherItem exampleCurrentWeather;
-    private TextView textMainWeather, textTemp, textHumidity, textAddress;
-    private EditText editTextTime;
+    private TextView textMainWeather, textTemp, textHumidity, textAddress, textSetTime;
+    private EditText editTextSetTime;
     private Button buttonSetTime;
     private ImageView imageIconDescription;
     private Switch aSwitch;
@@ -49,7 +53,6 @@ public class CurrentFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private static int Id = 0;
     private AlarmManager alarmManager;
-
     private Float Temp;
     private Float Temp_C;
     private String Humidity;
@@ -84,8 +87,9 @@ public class CurrentFragment extends Fragment {
         textTemp = view.findViewById(R.id.textTemp);
         textMainWeather = view.findViewById(R.id.textMain);
         textAddress = view.findViewById(R.id.textAddress);
+        textSetTime = view.findViewById(R.id.textSetTime);
         aSwitch = view.findViewById(R.id.switch_CF);
-        editTextTime = view.findViewById(R.id.editTextTime);
+        editTextSetTime = view.findViewById(R.id.editTextSetTime);
         buttonSetTime = view.findViewById(R.id.buttonSetTime);
 
         buttonSetTime.setOnClickListener(new View.OnClickListener() {
@@ -102,26 +106,36 @@ public class CurrentFragment extends Fragment {
         return view;
     }
 
-    private void initPreferences() {
-        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
-        editor = mSharedPreferences.edit();
-    }
-
-
     private void startAlarm(boolean isNotification, boolean isRepeat) throws ParseException {
 
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
         // SET TIME HERE
-        String time = editTextTime.getText().toString();
-        Log.d(Constant.TAG, time);
+
+
+//        textSetTime.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//                int minute = calendar.get(Calendar.MINUTE);
+//                TimePickerDialog timePickerDialog;
+//                timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+//                    @Override
+//                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+//                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+//                        calendar.set(0, 0, 0, hourOfDay, minute);
+//                        textSetTime.setText(simpleDateFormat.format(calendar.getTime()));
+//                    }
+//                }, hour, minute, true);
+//                timePickerDialog.show();
+//            }
+//        });
+        Calendar calendar = Calendar.getInstance();
+        String time = editTextSetTime.getText().toString();
         String mHour = time.split(":")[0];
         String mMinute = time.split(":")[1];
-        Calendar calendar = Calendar.getInstance();
-
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mHour));
         calendar.set(Calendar.MINUTE, Integer.parseInt(mMinute));
-        calendar.set(Calendar.SECOND, 0);
 
         Intent myIntent = new Intent(getActivity(), AlarmBroadCastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
@@ -129,8 +143,7 @@ public class CurrentFragment extends Fragment {
         if (!isRepeat)
             alarmManager.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + 1000, pendingIntent);
         else
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(), pendingIntent);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
     public void loadDataCurrent() {
@@ -239,20 +252,28 @@ public class CurrentFragment extends Fragment {
         builder.create().show();
     }
 
+    private void initPreferences() {
+        if (getActivity() != null) {
+            mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+            editor = mSharedPreferences.edit();
+        }
+    }
+
     private void saveDataWeather() {
         initPreferences();
-        editor.putFloat(Constant.KEY_TEMP_F, Temp);
-        editor.putFloat(Constant.KEY_TEMP_C, Temp_C);
-        editor.putString(Constant.KEY_HUMIDITY, Humidity);
-        editor.putString(Constant.KEY_ADDRESS, Address);
-        editor.putString(Constant.KEY_DESCRIPTION, Description);
-        editor.putString(Constant.KEY_WEATHER_MAIN, WeatherMain);
-        editor.commit();
+        if (editor != null) {
+            editor.putFloat(Constant.KEY_TEMP_F, Temp);
+            editor.putFloat(Constant.KEY_TEMP_C, Temp_C);
+            editor.putString(Constant.KEY_HUMIDITY, Humidity);
+            editor.putString(Constant.KEY_ADDRESS, Address);
+            editor.putString(Constant.KEY_DESCRIPTION, Description);
+            editor.putString(Constant.KEY_WEATHER_MAIN, WeatherMain);
+            editor.commit();
+        }
     }
 
     private void getDataWeather() {
         initPreferences();
-
         Temp = mSharedPreferences.getFloat(Constant.KEY_TEMP_F, 0);
         Temp_C = mSharedPreferences.getFloat(Constant.KEY_TEMP_C, 0);
         Humidity = mSharedPreferences.getString(Constant.KEY_HUMIDITY, "");

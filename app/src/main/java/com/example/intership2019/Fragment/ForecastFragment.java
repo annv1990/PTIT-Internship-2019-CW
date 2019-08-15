@@ -1,7 +1,6 @@
 package com.example.intership2019.Fragment;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -147,17 +146,21 @@ public class ForecastFragment extends Fragment {
     }
 
     private void initPreferences() {
-        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
-        editor = mSharedPreferences.edit();
+        if (getActivity() != null) {
+            mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+            editor = mSharedPreferences.edit();
+        }
     }
 
     private void saveForecastWeather() {
         initPreferences();
         Gson gson = new Gson();
         String jsonForecast = gson.toJson(weatherList);
-        editor.putString(Constant.KEY_WEATHER_LIST, jsonForecast);
-        editor.putString(Constant.KEY_ADDRESS, Address);
-        editor.commit();
+        if (editor != null) {
+            editor.putString(Constant.KEY_WEATHER_LIST, jsonForecast);
+            editor.putString(Constant.KEY_ADDRESS, Address);
+            editor.commit();
+        }
         recyclerViewForecastWeather.setAdapter(forecastAdapter);
         forecastAdapter.notifyDataSetChanged();
     }

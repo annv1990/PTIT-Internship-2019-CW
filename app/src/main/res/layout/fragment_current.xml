@@ -155,18 +155,6 @@
             android:textSize="15dp"
             android:textStyle="italic|bold" />
 
-        <EditText
-            android:id="@+id/editTextTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="147dp"
-            android:layout_marginBottom="139dp"
-            android:ems="10"
-            android:hint="Notification loop time "
-            android:inputType="time" />
-
         <Button
             android:id="@+id/buttonSetTime"
             style="@style/Widget.AppCompat.Button.Colored"
@@ -174,26 +162,37 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="38dp"
-            android:layout_marginBottom="140dp"
+            android:layout_marginEnd="125dp"
+            android:layout_marginBottom="117dp"
             android:text="OK"
             android:textAlignment="center"
             android:textStyle="bold"
             android:typeface="normal" />
 
-<!--        <Button
-            android:id="@+id/buttonCancel"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textSetTime"
+            android:layout_width="137dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="38dp"
-            android:layout_marginBottom="101dp"
-            android:text="Cancel"
-            android:textAlignment="center"
-            android:textStyle="bold|italic" />-->
+            android:layout_marginEnd="112dp"
+            android:layout_marginBottom="171dp"
+            android:text="Set Time"
+            android:textColor="#EB0B0B"
+            android:textSize="30dp"
+            android:textStyle="bold|italic" />
 
+        <EditText
+            android:id="@+id/editTextSetTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="51dp"
+            android:layout_marginBottom="118dp"
+            android:ems="5"
+            android:hint="Set Time"
+            android:inputType="time" />
 
     </RelativeLayout>
 

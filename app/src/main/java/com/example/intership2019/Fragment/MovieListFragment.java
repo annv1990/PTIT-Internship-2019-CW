@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,6 +46,8 @@ public class MovieListFragment extends Fragment {
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor editor;
     private SwipeRefreshLayout swipeRefreshLayoutMovieList;
+    private Context mContext;
+    private boolean LoadData = false;
 
     public MovieListFragment() {
         // Required empty public constructor
@@ -54,6 +58,11 @@ public class MovieListFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -87,10 +96,12 @@ public class MovieListFragment extends Fragment {
 
 
     public void loadDataMovie() {
+        LoadData = true;
         swipeRefreshLayoutMovieList.setRefreshing(true);
         final ApiInterfaceMovieList apiInterfaceMovieList = ApiClientMovieList.getClient().create(ApiInterfaceMovieList.class);
         final String key = Constant.KEY_API_MOVIE_LIST;
         Call<MainInfoMovieList> call = apiInterfaceMovieList.getInfoMovieList(key);
+        Log.d(Constant.TAG, "loadDataMovie: " + call.request().url());
         call.enqueue(new Callback<MainInfoMovieList>() {
 
             @Override
@@ -100,50 +111,53 @@ public class MovieListFragment extends Fragment {
 
                 if (mainInfoMovieList != null) {
                     movieList = mainInfoMovieList.getItems();
-                }
-                Activity activityMovieDetail = getActivity();
-                movieListAdapter = new MovieListAdapter(movieList, activityMovieDetail);
+                    Activity activityMovieDetail = getActivity();
+                    movieListAdapter = new MovieListAdapter(movieList, activityMovieDetail);
+                    movieListAdapter.notifyDataSetChanged();
+                    recyclerViewMovieList.setAdapter(movieListAdapter);
 
-                if (movieList != null) {
-                    for (final ListOfMovie movie : movieList) {
-                        int movieId = movie.getId();
+                    if (movieList != null) {
+                        for (final ListOfMovie movie : movieList) {
+                            int movieId = movie.getId();
 
-                        Call<DescriptionMovie> callDetail = apiInterfaceMovieList.getDescriptionMovie(movieId, key);
-                        callDetail.enqueue(new Callback<DescriptionMovie>() {
+                            Call<DescriptionMovie> callDetail = apiInterfaceMovieList.getDescriptionMovie(movieId, key);
+                            callDetail.enqueue(new Callback<DescriptionMovie>() {
 
-                            @Override
-                            public void onResponse(Call<DescriptionMovie> call, Response<DescriptionMovie> response) {
-                                swipeRefreshLayoutMovieList.setRefreshing(false);
+                                @Override
+                                public void onResponse(Call<DescriptionMovie> call, Response<DescriptionMovie> response) {
+                                    swipeRefreshLayoutMovieList.setRefreshing(false);
 
-                                descriptionMovie = response.body();
+                                    descriptionMovie = response.body();
 
-                                if (descriptionMovie != null && descriptionMovie.getRuntime() != null) {
-                                    //gán duration bằng runtime
-                                    movie.setDuration(descriptionMovie.getRuntime());
+                                    if (descriptionMovie != null && descriptionMovie.getRuntime() != null) {
+                                        //gán duration bằng runtime
+                                        movie.setDuration(descriptionMovie.getRuntime());
+                                    }
+                                    movieListAdapter = new MovieListAdapter(movieList, getActivity());
+                                    movieListAdapter.notifyDataSetChanged();
+                                    Log.e(Constant.TAG, "loading API");
                                 }
-                                movieListAdapter.notifyDataSetChanged();
-                                Log.e(Constant.TAG, "loading API" + mainInfoMovieList.toString());
-                            }
 
-                            @Override
-                            public void onFailure(Call<DescriptionMovie> call, Throwable t) {
-                                swipeRefreshLayoutMovieList.setRefreshing(false);
-                                Log.e(Constant.TAG, "error loading from API" + t.getMessage());
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<DescriptionMovie> call, Throwable t) {
+                                    swipeRefreshLayoutMovieList.setRefreshing(false);
+                                    Log.e(Constant.TAG, "error loading from API 2 " + t.getMessage());
+                                }
+                            });
+                        }
                     }
+                    saveMoviesList();
                 }
-
-                saveMoviesList();
-
+//                else
+//                    Toast.makeText(getActivity(), "Not data", Toast.LENGTH_SHORT).show();
                 Log.e(Constant.TAG, "loading API");
             }
 
             @Override
             public void onFailure(Call<MainInfoMovieList> call, Throwable t) {
                 swipeRefreshLayoutMovieList.setRefreshing(false);
+                Log.e(Constant.TAG, "error loading from API 1" + t.getMessage());
                 Dialog();
-                Log.e(Constant.TAG, "error loading from API" + t.getMessage());
             }
         });
     }
@@ -162,25 +176,31 @@ public class MovieListFragment extends Fragment {
         builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getActivity(), "Not internet not data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error call API", Toast.LENGTH_SHORT).show();
             }
         });
         builder.create().show();
     }
 
     private void initPreferences() {
-        mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
-        editor = mSharedPreferences.edit();
+        if (getActivity() != null) {
+            mSharedPreferences = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+            editor = mSharedPreferences.edit();
+        }
     }
 
     private void saveMoviesList() {
         initPreferences();
         Gson gson = new Gson();
         String jsonMovie = gson.toJson(movieList);
-        editor.putString(Constant.KEY_MOVIE_LIST, jsonMovie);
-        editor.commit();
-        recyclerViewMovieList.setAdapter(movieListAdapter);
-        movieListAdapter.notifyDataSetChanged();
+        if (editor != null) {
+            editor.putString(Constant.KEY_MOVIE_LIST, jsonMovie);
+            editor.commit();
+        }
+//        recyclerViewMovieList.setAdapter(movieListAdapter);
+//        if (movieListAdapter != null) {
+//            movieListAdapter.notifyDataSetChanged();
+//        }
     }
 
     private void getMovieList() {
