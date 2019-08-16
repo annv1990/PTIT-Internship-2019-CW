@@ -3,7 +3,6 @@ package com.example.intership2019.Fragment;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.intership2019.AlarmBroadCastReceiver;
@@ -31,10 +30,7 @@ import com.example.intership2019.Constant;
 import com.example.intership2019.Fragment.CurrentWeather.CurrentWeatherItem;
 import com.example.intership2019.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,7 +40,7 @@ public class CurrentFragment extends Fragment {
 
     private CurrentWeatherItem exampleCurrentWeather;
     private TextView textMainWeather, textTemp, textHumidity, textAddress, textSetTime;
-    private EditText editTextSetTime;
+    private EditText editTextSetTimeHour, editTextSetTimeMinute;
     private Button buttonSetTime;
     private ImageView imageIconDescription;
     private Switch aSwitch;
@@ -59,6 +55,7 @@ public class CurrentFragment extends Fragment {
     private String Description;
     private String Address;
     private String WeatherMain;
+
 
     public CurrentFragment() {
         // Required empty public constructor
@@ -89,7 +86,8 @@ public class CurrentFragment extends Fragment {
         textAddress = view.findViewById(R.id.textAddress);
         textSetTime = view.findViewById(R.id.textSetTime);
         aSwitch = view.findViewById(R.id.switch_CF);
-        editTextSetTime = view.findViewById(R.id.editTextSetTime);
+        editTextSetTimeHour = view.findViewById(R.id.editTextSetTimeHour);
+        editTextSetTimeMinute = view.findViewById(R.id.editTextSetTimeMinute);
         buttonSetTime = view.findViewById(R.id.buttonSetTime);
 
         buttonSetTime.setOnClickListener(new View.OnClickListener() {
@@ -97,21 +95,21 @@ public class CurrentFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     startAlarm(true, true);
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+
         loadDataCurrent();
         return view;
     }
 
-    private void startAlarm(boolean isNotification, boolean isRepeat) throws ParseException {
+    private void startAlarm(boolean isNotification, boolean isRepeat) throws Exception {
 
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
         // SET TIME HERE
-
 
 //        textSetTime.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -130,20 +128,36 @@ public class CurrentFragment extends Fragment {
 //                timePickerDialog.show();
 //            }
 //        });
-        Calendar calendar = Calendar.getInstance();
-        String time = editTextSetTime.getText().toString();
-        String mHour = time.split(":")[0];
-        String mMinute = time.split(":")[1];
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mHour));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(mMinute));
-
         Intent myIntent = new Intent(getActivity(), AlarmBroadCastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
 
-        if (!isRepeat)
-            alarmManager.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + 1000, pendingIntent);
-        else
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Calendar calendar = Calendar.getInstance();
+        String mHour = editTextSetTimeHour.getText().toString();
+        String mMinute = editTextSetTimeMinute.getText().toString();
+        if (!TextUtils.isEmpty(mHour) && !TextUtils.isEmpty(mMinute)) {
+            if (Integer.parseInt(mHour) >= 0 && Integer.parseInt(mHour) <= 23) {
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mHour));
+            } else {
+                Toast.makeText(getActivity(), "Hour from 0 to 23", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (Integer.parseInt(mMinute) >= 0 && Integer.parseInt(mMinute) <= 59) {
+                calendar.set(Calendar.MINUTE, Integer.parseInt(mMinute));
+            } else {
+                Toast.makeText(getActivity(), "Minute from 0 to 59", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!isRepeat) {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime() + 1000, pendingIntent);
+            } else {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            Toast.makeText(getActivity(), "Set time successfully", Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(getActivity(), "Please enter the time", Toast.LENGTH_SHORT).show();
+
+
     }
 
     public void loadDataCurrent() {
