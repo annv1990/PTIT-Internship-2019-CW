@@ -21,9 +21,10 @@ import com.example.intership2019.Fragment.DPObserver.UserDataRepository;
 import com.example.intership2019.Fragment.DPPrototype.WinOS;
 import com.example.intership2019.R;
 
-import java.util.Arrays;
 
+import java.util.Arrays;
 import androidx.fragment.app.Fragment;
+
 
 
 public class DesignPatternsFragment extends Fragment implements Observer {
