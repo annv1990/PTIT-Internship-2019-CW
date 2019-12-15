@@ -1,7 +1,6 @@
 package com.example.intership2019.Fragment.MovieList;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,13 +34,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
-        Bundle bundle = getIntent().getExtras();
-
-        mMovieId = bundle.getInt(Constant.KEY_MOVIE_ID, 0);
-        mMovieName = bundle.getString(Constant.KEY_MOVIE_NAME);
-        mMovieOverView = bundle.getString(Constant.KEY_MOVIE_OVERVIEW);
-        mMovieDuration = bundle.getInt(Constant.KEY_MOVIE_DURATION);
-
         textMovieName = findViewById(R.id.textMovieName);
         textReleaseDuration = findViewById(R.id.textRelease_Duration);
         textOverView = findViewById(R.id.textOverView);
@@ -51,6 +44,15 @@ public class MovieDetailActivity extends AppCompatActivity {
         imageRateMovie3 = findViewById(R.id.imageRateMovie3);
         imageRateMovie4 = findViewById(R.id.imageRateMovie4);
         imageRateMovie5 = findViewById(R.id.imageRateMovie5);
+
+        Bundle bundle = getIntent().getExtras();
+//        Intent intent = getIntent();
+//        textMovieName.setText(intent.getStringExtra(Constant.KEY_MOVIE_NAME));
+        mMovieId = bundle.getInt(Constant.KEY_MOVIE_ID, 0);
+
+        mMovieName = bundle.getString(Constant.KEY_MOVIE_NAME);
+        mMovieOverView = bundle.getString(Constant.KEY_MOVIE_OVERVIEW);
+        mMovieDuration = bundle.getInt(Constant.KEY_MOVIE_DURATION);
 
         textMovieName.setText(mMovieName);
         textReleaseDuration.setText(mMovieDuration + Constant.MINUTE);

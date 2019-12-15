@@ -3,13 +3,13 @@ package com.example.intership2019.Fragment;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +32,7 @@ import com.example.intership2019.R;
 
 import java.util.Calendar;
 
+import androidx.fragment.app.Fragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +40,7 @@ import retrofit2.Response;
 public class CurrentFragment extends Fragment {
 
     private CurrentWeatherItem exampleCurrentWeather;
-    private TextView textMainWeather, textTemp, textHumidity, textAddress, textSetTime;
+    private TextView textMainWeather, textTemp, textHumidity, textAddress, textSetTime, textsms;
     private EditText editTextSetTimeHour, editTextSetTimeMinute;
     private Button buttonSetTime;
     private ImageView imageIconDescription;
@@ -55,7 +56,8 @@ public class CurrentFragment extends Fragment {
     private String Description;
     private String Address;
     private String WeatherMain;
-
+    private AlarmBroadCastReceiver alarmBroadCastReceiver;
+    private BroadcastReceiver broadcastReceiver = null;
 
     public CurrentFragment() {
         // Required empty public constructor
@@ -71,13 +73,35 @@ public class CurrentFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+//        broadcastReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                processReceive(context,intent);
+//            }
+//        };
+
     }
+
+//    public void processReceive(Context context, Intent intent) {
+//        String sms = "get";
+//        Bundle bundle = intent.getExtras();
+//        Object[] objArr = (Object[]) bundle.get(sms);
+//        String smsto = "";
+//        for (int i = 0; i<objArr.length;i++){
+//            SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) objArr[i]);
+//            String body = smsMessage.getMessageBody();
+//
+//        }
+//         textsms.setText(sms);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_current, container, false);
+
         relativeLayoutCurrentWeather = view.findViewById(R.id.relative_layout);
         imageIconDescription = view.findViewById(R.id.iconDescription);
         textHumidity = view.findViewById(R.id.textHumidity);
@@ -85,6 +109,7 @@ public class CurrentFragment extends Fragment {
         textMainWeather = view.findViewById(R.id.textMain);
         textAddress = view.findViewById(R.id.textAddress);
         textSetTime = view.findViewById(R.id.textSetTime);
+        textsms = view.findViewById(R.id.textsms);
         aSwitch = view.findViewById(R.id.switch_CF);
         editTextSetTimeHour = view.findViewById(R.id.editTextSetTimeHour);
         editTextSetTimeMinute = view.findViewById(R.id.editTextSetTimeMinute);
@@ -107,27 +132,10 @@ public class CurrentFragment extends Fragment {
 
     private void startAlarm(boolean isNotification, boolean isRepeat) throws Exception {
 
+        alarmBroadCastReceiver = new AlarmBroadCastReceiver();
+
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
-        // SET TIME HERE
-
-//        textSetTime.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//                int minute = calendar.get(Calendar.MINUTE);
-//                TimePickerDialog timePickerDialog;
-//                timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-//                    @Override
-//                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-//                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-//                        calendar.set(0, 0, 0, hourOfDay, minute);
-//                        textSetTime.setText(simpleDateFormat.format(calendar.getTime()));
-//                    }
-//                }, hour, minute, true);
-//                timePickerDialog.show();
-//            }
-//        });
         Intent myIntent = new Intent(getActivity(), AlarmBroadCastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
 
@@ -204,6 +212,7 @@ public class CurrentFragment extends Fragment {
                     }
                 });
 
+                /******Luu du lieu***********/
                 saveDataWeather();
 
                 Log.e(Constant.TAG, "posts loaded from API");
@@ -294,5 +303,36 @@ public class CurrentFragment extends Fragment {
         Address = mSharedPreferences.getString(Constant.KEY_ADDRESS, "");
         Description = mSharedPreferences.getString(Constant.KEY_DESCRIPTION, "");
         WeatherMain = mSharedPreferences.getString(Constant.KEY_WEATHER_MAIN, "");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(Constant.TAG, "start");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(Constant.TAG, "resume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Log.d(Constant.TAG, "pause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(Constant.TAG, "stop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(Constant.TAG, "destroy");
     }
 }

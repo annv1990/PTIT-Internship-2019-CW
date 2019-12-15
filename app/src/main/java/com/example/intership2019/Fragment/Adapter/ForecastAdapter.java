@@ -1,8 +1,7 @@
 package com.example.intership2019.Fragment.Adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,16 @@ import com.example.intership2019.R;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.RecyclerViewHolder> {
 
     private List<com.example.intership2019.Fragment.ForecastWeather.List> listForecastWeather;
 
     @NonNull
     @Override
-    public ForecastAdapter.RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -71,7 +73,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-
             textTempForecastWeather = itemView.findViewById(R.id.textTempForecastWeather);
             textHumidityForecastWeather = itemView.findViewById(R.id.textHumidityForecastWeather);
             textWeatherMainForecastWeather = itemView.findViewById(R.id.textWeatherMainForecastWeather);

@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +25,10 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,12 +79,13 @@ public class ForecastFragment extends Fragment {
                 android.R.color.holo_red_light);
 
         recyclerViewForecastWeather = view.findViewById(R.id.rv_Forecast);
+
+
         recyclerViewForecastWeather.setHasFixedSize(true);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerViewForecastWeather.setLayoutManager(layoutManager);
+        recyclerViewForecastWeather.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         loadDataForecast();
+
         swipeRefreshLayoutForecast.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -104,10 +106,13 @@ public class ForecastFragment extends Fragment {
             public void onResponse(Call<ForecastWeatherItem> call,
                                    Response<ForecastWeatherItem> response) {
                 swipeRefreshLayoutForecast.setRefreshing(false);
+
                 forecastWeatherItem = response.body();
                 weatherList = forecastWeatherItem.getList();
+
                 Address = forecastWeatherItem.getCity().getName();
                 textAddress.setText(Address);
+
                 forecastAdapter = new ForecastAdapter(weatherList);
 
                 saveForecastWeather();

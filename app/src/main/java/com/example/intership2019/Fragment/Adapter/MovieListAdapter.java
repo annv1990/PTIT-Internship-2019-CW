@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.RecyclerViewHolder> {
 
-    interface IOnItemClickListener {
+      interface IOnItemClickListener {
         void onItemClick();
     }
 
@@ -60,7 +62,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
 
 
         if (itemList.getDuration() != null && itemList.getReleaseDate() != null) {
-            textReleaseDuration.setText(itemList.getReleaseDate() + ", " + itemList.getDuration() / 60 + " hour " + itemList.getDuration() % 60 + " minute ");
+            textReleaseDuration.setText(itemList.getReleaseDate() + ", " +
+                    itemList.getDuration() / 60 + " hour " + itemList.getDuration() % 60 + " minute ");
         } else {
             textReleaseDuration.setText(null);
         }
@@ -102,17 +105,22 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
         recyclerViewHolder.onBind(new IOnItemClickListener() {
             @Override
             public void onItemClick() {
-                Intent intent = new Intent(mActivityMovieDetail, MovieDetailActivity.class);
-                Bundle bundle = new Bundle();
+                Intent intent = new Intent(mActivityMovieDetail, MovieDetailActivity.class);//***
+
+                //intent.putExtra();
+
+                Bundle bundle = new Bundle();//***
                 bundle.putInt(Constant.KEY_MOVIE_ID, itemList.getId());
+//                intent.putExtra(Constant.KEY_MOVIE_ID,itemList.getId());//cach 2 truyen bang extra
                 bundle.putString(Constant.KEY_MOVIE_NAME, itemList.getTitle());
                 bundle.putString(Constant.KEY_MOVIE_OVERVIEW, itemList.getOverview());
                 if (itemList.getDuration() != null) {
                     bundle.putInt(Constant.KEY_MOVIE_DURATION, itemList.getDuration());
                 } else bundle.putInt(Constant.KEY_MOVIE_DURATION, 0);
 
-                intent.putExtras(bundle);
+                intent.putExtras(bundle);//*****
                 mActivityMovieDetail.startActivity(intent);
+                //mActivityMovieDetail.startActivityForResult(intent,100);
             }
         });
     }

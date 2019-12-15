@@ -1,11 +1,16 @@
 <resources>
     <string name="app_name">Weather</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_current">Current Weather</string>
-    <string name="title_forecast">Forecast</string>
-    <string name="title_movie_list">Movie List</string>
-    <string name="Switch_yes">C</string>
-    <string name="Switch_no">F</string>
-    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="title_current" translatable="false">Current Weather</string>
+    <string name="title_forecast" translatable="false">Forecast</string>
+    <string name="title_movie_list" translatable="false">Movie List</string>
+    <string name="test1" translatable="false">Test1</string>
+    <string name="Switch_yes" translatable="false">C</string>
+    <string name="Switch_no" translatable="false">F</string>
+    <string name="title_activity_movie_detail" translatable="false">MovieDetailActivity</string>
+    <string name="content" translatable="false">This is a multi-language application</string>
+    <string name="news" translatable="false">Google is adding Kotlin as an official programming language for Android development</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

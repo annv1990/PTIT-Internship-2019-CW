@@ -8,13 +8,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.intership2019.Fragment.CurrentFragment;
 import com.example.intership2019.Fragment.CurrentWeather.CurrentWeatherItem;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,6 +23,25 @@ public class MyService extends IntentService {
 
     private CurrentWeatherItem exampleCurrentWeather;
 
+    /*@Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Intent broadCastIntent =new Intent();
+broadCastIntent.setAction(CurrentFragment.)
+            }
+        }).start();
+        return START_REDELIVER_INTENT;
+    }
+
+*/
     public MyService() {
         super("MyService");
     }
@@ -90,5 +109,11 @@ public class MyService extends IntentService {
 
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("internship","in destroy");
     }
 }

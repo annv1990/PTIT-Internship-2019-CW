@@ -1,7 +1,7 @@
 package com.example.intership2019;
 
 public class Constant {
-    public static final String TAG = "com.example.intership2019";
+    public static final String TAG = "Intership2019";
     public static final String CLOUDS = "Clouds";
     public static final String RAIN = "Rain";
     public static final String CLEAR = "Clear";

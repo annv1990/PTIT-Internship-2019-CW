@@ -12,4 +12,8 @@
         android:id="@+id/navigation_movie"
         android:title="@string/title_movie_list"
         android:icon="@drawable/movie_projector_50px"/>
+    <item
+        android:id="@+id/navigation_test1"
+        android:title="@string/test1"
+        android:icon="@drawable/movie_projector_50px"/>
 </menu>
