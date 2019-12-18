@@ -5,6 +5,10 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 28
     useLibrary 'org.apache.http.legacy'
+    compileOptions {
+        targetCompatibility = "8"
+        sourceCompatibility = "8"
+    }
 //    buildToolsVersion "21.1.2"
     defaultConfig {
         applicationId "com.example.navigation3"

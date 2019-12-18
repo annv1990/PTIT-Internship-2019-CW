@@ -1,13 +1,10 @@
 package com.example.intership2019.Fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.intership2019.Constant;
@@ -16,7 +13,9 @@ import com.example.intership2019.Fragment.DPAbstractFactory.ComputerFactory;
 import com.example.intership2019.Fragment.DPAbstractFactory.PCFactory;
 import com.example.intership2019.Fragment.DPAbstractFactory.ServerFactory;
 import com.example.intership2019.Fragment.DPBuilder.User;
-import com.example.intership2019.Fragment.DPDependencyInjection.MyComponent;
+import com.example.intership2019.Fragment.DPDependencyInjectionExample.Body;
+import com.example.intership2019.Fragment.DPDependencyInjectionExample.DaggerDoctor;
+import com.example.intership2019.Fragment.DPDependencyInjectionExample.Doctor;
 import com.example.intership2019.Fragment.DPFactoryMethod.Phone;
 import com.example.intership2019.Fragment.DPFactoryMethod.PhoneFactory;
 import com.example.intership2019.Fragment.DPFactoryMethod.PhoneType;
@@ -26,8 +25,6 @@ import com.example.intership2019.Fragment.DPPrototype.WinOS;
 import com.example.intership2019.R;
 
 import java.util.Arrays;
-
-import javax.inject.Inject;
 
 import androidx.fragment.app.Fragment;
 
@@ -41,17 +38,12 @@ public class DesignPatternsFragment extends Fragment implements Observer {
     private TextView mTextPrototype;
     private TextView mTextObserver;
     private UserDataRepository mUserDataRepository;
+    private TextView mTxtDependency;
 
-    private MyComponent myComponent;
-    @Inject
-    SharedPreferences sharedPreferences;
-    private EditText mInUsername;
-    private EditText mInNumber;
-    private Button mBtnSave;
-    private Button mBtnGet;
 
     public DesignPatternsFragment() {
         // Required empty public constructor
+
 
     }
 
@@ -63,6 +55,12 @@ public class DesignPatternsFragment extends Fragment implements Observer {
         mUserDataRepository.addObserver(this);
 
     }
+
+    private Body createBody() {
+        Doctor doctor = DaggerDoctor.create();
+        return doctor.injectBlood();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,24 +84,12 @@ public class DesignPatternsFragment extends Fragment implements Observer {
         WinOS winOS2 = winOS1.clone();
         winOS2.setOthers("Android Studio");
         mTextPrototype.setText(winOS1 + "\n" + winOS2);
+
+        Body body = createBody();
+        mTxtDependency.setText("Blood: " + body.getBlood().getKindOfBlood());
+
         onChange("vu tien dat \n", 22);
 
-        mBtnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("username", mInUsername.getText().toString().trim());
-                editor.putString("number", mInNumber.getText().toString().trim());
-                editor.apply();
-            }
-        });
-        mBtnGet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mInUsername.setText(sharedPreferences.getString("username", "default"));
-                mInNumber.setText(sharedPreferences.getString("number", "12345"));
-            }
-        });
         return view;
     }
 
@@ -113,10 +99,7 @@ public class DesignPatternsFragment extends Fragment implements Observer {
         mTextFactoryMethod = view.findViewById(R.id.textFactoryMethod);
         mTextPrototype = view.findViewById(R.id.textPrototype);
         mTextObserver = view.findViewById(R.id.textObserver);
-        mInUsername = view.findViewById(R.id.inUsername);
-        mInNumber = view.findViewById(R.id.inNumber);
-        mBtnSave = view.findViewById(R.id.btnSave);
-        mBtnGet = view.findViewById(R.id.btnGet);
+        mTxtDependency = view.findViewById(R.id.txtDependencyInjection);
     }
 
 
@@ -132,4 +115,5 @@ public class DesignPatternsFragment extends Fragment implements Observer {
             mUserDataRepository.removeObserver(this);
         }
     }
+
 }

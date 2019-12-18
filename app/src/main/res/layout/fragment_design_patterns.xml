@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -81,60 +81,55 @@
             android:padding="16dp" />
 
         <TextView
-            android:id="@+id/textDependencyInjection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hello_blank_fragment"
-            android:textColor="#000000"
-            android:textSize="24dp" />
-        <TextView
-            android:id="@+id/token"
+            android:id="@+id/txtDependencyInjection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hello_blank_fragment"
             android:textColor="#000000"
             android:textSize="24dp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <EditText
-                android:id="@+id/inUsername"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="Username" />
 
-            <EditText
-                android:id="@+id/inNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/inUsername"
-                android:layout_margin="8dp"
-                android:inputType="number"
-                android:hint="Number" />
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
+<!--            <EditText-->
+<!--                android:id="@+id/inUsername"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:hint="Username" />-->
 
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SAVE"
-                android:layout_below="@+id/inNumber"
-                android:layout_toLeftOf="@+id/btnGet"
-                android:layout_toStartOf="@+id/btnGet"
-                android:layout_marginRight="8dp"
-                android:layout_marginEnd="8dp" />
+<!--            <EditText-->
+<!--                android:id="@+id/inNumber"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@+id/inUsername"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:inputType="number"-->
+<!--                android:hint="Number" />-->
 
-            <Button
-                android:id="@+id/btnGet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="GET"
-                android:layout_below="@+id/inNumber"
-                android:layout_alignRight="@+id/inNumber"
-                android:layout_alignEnd="@+id/inNumber" />
+<!--            <Button-->
+<!--                android:id="@+id/btnSave"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="SAVE"-->
+<!--                android:layout_below="@+id/inNumber"-->
+<!--                android:layout_toLeftOf="@+id/btnGet"-->
+<!--                android:layout_toStartOf="@+id/btnGet"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                tools:ignore="OnClick" />-->
 
-        </RelativeLayout>
+<!--            <Button-->
+<!--                android:id="@+id/btnGet"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="GET"-->
+<!--                android:layout_below="@+id/inNumber"-->
+<!--                android:layout_alignRight="@+id/inNumber"-->
+<!--                android:layout_alignEnd="@+id/inNumber" />-->
+
+<!--        </RelativeLayout>-->
 
     </LinearLayout>
-</FrameLayout>
+</ScrollView>
