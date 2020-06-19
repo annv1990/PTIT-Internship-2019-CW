@@ -28,15 +28,15 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Recycl
 
         View contactView = inflater.inflate(R.layout.item_row_forecast, viewGroup, false);
 
-        RecyclerViewHolder viewHolder = new RecyclerViewHolder(contactView);
-
-        return viewHolder;
+        return new RecyclerViewHolder(contactView);
     }
 
     @Override
 
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, int position) {
         com.example.intership2019.Fragment.ForecastWeather.List item = listForecastWeather.get(position);
+
+
 
         TextView textTempForecastWeather = recyclerViewHolder.textTempForecastWeather;
         textTempForecastWeather.setText(Constant.TEMPERATURE + (new Integer((int) ((item.getMain().getTemp() - 32) * 5 / 9)) + "°C"));

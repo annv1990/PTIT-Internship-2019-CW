@@ -1,5 +1,6 @@
 package com.example.intership2019.Fragment.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -48,6 +49,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MovieListAdapter.RecyclerViewHolder recyclerViewHolder, final int position) {
         final ListOfMovie itemList = listOfMovie.get(position);
@@ -125,7 +127,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Recy
         });
     }
 
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textTitleMovie, textOverView, textReleaseDuration, textMovieId;
         private ImageView imageMovie, imageRateMovie1, imageRateMovie2, imageRateMovie3, imageRateMovie4, imageRateMovie5;

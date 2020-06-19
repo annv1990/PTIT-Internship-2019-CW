@@ -78,7 +78,7 @@ broadCastIntent.setAction(CurrentFragment.)
             @Override
             public void onResponse(Call<CurrentWeatherItem> call, Response<CurrentWeatherItem> response) {
                 exampleCurrentWeather = response.body();
-                final Float Temp_C = new Float((int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9));
+                final Float Temp_C = (float) (int) ((exampleCurrentWeather.getMain().getTemp() - 32) * 5 / 9);
                 final String Description = exampleCurrentWeather.getWeather().get(0).getDescription();
 
                 Intent intent = new Intent(getApplication(), CurrentFragment.class);

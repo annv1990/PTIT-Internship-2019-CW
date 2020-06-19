@@ -14,7 +14,7 @@ public class Constant {
     public static final String MINUTE = " minute";
     public static final String LINK_IMAGE_MOVIE = "https://image.tmdb.org/t/p/w500";
     public static final String KEY_API_MOVIE_LIST = "ba22e944d75a4f64fdba15e60523251f";
-    public static final String KEY_API_WEATHER = "221a3de46de6c0007400347bba2bdaa7";
+    public static final String KEY_API_WEATHER = "b9ea0f44ca6c3a98af103c6fd2bfa4d1";
     public static final String KEY_MOVIE_ID = "key_movie_Id";
     public static final String KEY_MOVIE_NAME = "key_movie_Name";
     public static final String KEY_MOVIE_OVERVIEW = "key_movie_over_view";

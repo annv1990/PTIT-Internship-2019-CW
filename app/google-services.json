@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "354295887728",
+    "firebase_url": "https://intership2019-4d1e9.firebaseio.com",
+    "project_id": "intership2019-4d1e9",
+    "storage_bucket": "intership2019-4d1e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354295887728:android:6d5af29721ae954ced41b5",
+        "android_client_info": {
+          "package_name": "com.example.navigation3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354295887728-uv48vhufisan7dni2mn0bivee5fhn8rt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.navigation3",
+            "certificate_hash": "d3390b1de8e2c740bc523a95f73316c047d06ac1"
+          }
+        },
+        {
+          "client_id": "354295887728-eh8u9n6vdmnrrleavk0rhfnbhr6lmu57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV2Cpv75G0EcRB43R3KX7tdb7bIwUYMHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354295887728-eh8u9n6vdmnrrleavk0rhfnbhr6lmu57.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
